@@ -1,0 +1,71 @@
+
+{#<div >
+
+    <div class="uk-card uk-box-shadow-medium uk-border-rounded uk-overflow-hidden uk-card-default reveal-animation-b product-card">
+      {% if productincart != true %}<a href="{{ path('store-product', { "productId" : product.id }) }}">{% endif %}
+        <div class="uk-card-media-top">
+            <div class="uk-background-cover uk-height-medium" data-src="{{ asset('uploads/productcovers/' ~ product.cover) }}" uk-img>
+
+            </div>
+        </div>
+        {% if productincart != true %}  </a>{% endif %}
+        {% if showbody %}
+        {% set currentPath = app.request.attributes.get('_route') %}
+
+        <div class="uk-card-body uk-background-cover">
+                      <h3 class="product-title uk-card-title uk-margin-remove">{{ product.name }}</h3>
+            <p class="category  uk-margin-remove-top uk-margin-medium-top">{{ product.category.name }}</p>
+
+
+            {% if currentPath == "store-cart" %}
+                 <div class="uk-margin">
+                   <label class="uk-form-label" for="form-stacked-text">Unidades</label>
+                   <input data-initialprice="{{ product.price }}" data-productid="{{ product.id }}" class=" units-input uk-input number-form" type="number" min="1" value="1" name="points" step="1">
+                 </div>
+            {% endif %}
+
+        </div>
+{% endif %}
+
+        <div class="uk-card-footer">
+          <p class="price"><span class=" uk-icon uk-margin-small-right"  uk-icon="icon: cart;"></span> $ <span id="price_value-{{ product.id }}">{{ product.price|number_format(0) }}</span> </p>
+        </div>
+
+
+    </div>
+
+</div>#}
+
+{% set currentPath = app.request.attributes.get('_route') %}
+
+<div class="reveal-animation-b">
+  <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
+      <div class="uk-card-media-left uk-cover-container">
+          <img src="{{ asset('uploads/productcovers/' ~ product.cover) }}" alt="" uk-cover>
+          <canvas width="600" height="400"></canvas>
+      </div>
+      <div>
+
+          <div class="uk-card-body">
+            <h3 class="product-title uk-card-title uk-margin-remove">{{ product.name|capitalize }}</h3>
+              <p class="category  uk-margin-remove-top uk-margin-medium-top">{{ product.category.name }}</p>
+             <p>{{ product.description }}</p>
+              <h2 >$ <span id="price_value-{{ product.id }}"> {{ product.price|number_format(0) }}</span> CLP</h2>  
+
+             <div class="uk-margin-top">
+             {% if currentPath == "store-cart" %}
+             <div class="uk-margin">
+               <label class="uk-form-label" for="form-stacked-text">Unidades</label>
+               <input data-initialprice="{{ product.price }}" data-productid="{{ product.id }}" class=" units-input uk-input number-form" type="number" min="1" value="1" name="points" step="1">
+             </div>
+             {% else %}
+             <a href="{{ path('store-product', { "productId" : product.id }) }}" class="link-c uk-button">Comprar</a>
+             {% endif %}
+           </div>
+
+          </div>
+
+      </div>
+  </div>
+
+</div>

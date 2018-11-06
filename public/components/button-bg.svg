@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 806 297">
+  <defs>
+    <style>
+      .cls-1 {
+        clip-path: url(#clip-button-bg);
+      }
+
+      .cls-2 {
+        fill: url(#linear-gradient-2);
+      }
+
+      .cls-3 {
+        fill: url(#linear-gradient-3);
+      }
+
+      .cls-4 {
+        fill: url(#linear-gradient-4);
+      }
+
+      .cls-5 {
+        fill: url(#linear-gradient-5);
+      }
+
+      .cls-6 {
+        fill: url(#linear-gradient);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="1" y1="0.63" x2="0" y2="0.576" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#fead06"/>
+      <stop offset="1" stop-color="#eb845d"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="0.5" x2="0.63" y2="0.187" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#d1f6b5"/>
+      <stop offset="1" stop-color="#6aecc9"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" x1="0.618" y1="0.157" x2="0" y2="0.84" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#fe0095"/>
+      <stop offset="1" stop-color="#c867db"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-4" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#5a64db"/>
+      <stop offset="1" stop-color="#28d9ff"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-5" x1="0.5" x2="-0.247" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#bf00ad"/>
+      <stop offset="1" stop-color="#600057"/>
+    </linearGradient>
+    <clipPath id="clip-button-bg">
+      <rect width="806" height="297"/>
+    </clipPath>
+  </defs>
+  <g id="button-bg" class="cls-1">
+    <rect class="cls-6" width="806" height="297"/>
+    <path id="Path_159" data-name="Path 159" class="cls-2" d="M4690-1208c-14,12-112,78-96,280s8,48,8,48h282v-328Z" transform="translate(-4070 1199)"/>
+    <path id="Path_158" data-name="Path 158" class="cls-3" d="M4070-1020.447S4118-1096,4234-1060s160,202,216,192-380,0-380,0Z" transform="translate(-4070 1199)"/>
+    <path id="Path_157" data-name="Path 157" class="cls-4" d="M4230-856.27s121.333-32.541,179.667-83.676,56-125.514,172.667-162.7,175,46.486,273,32.541S5000-1184,5000-1184v344Z" transform="translate(-4180 1151)"/>
+    <path id="Path_156" data-name="Path 156" class="cls-5" d="M4598-506s64-75,186-51,122-53,130-69,54,106,54,106-134,108-144,104-236-32-236-32Z" transform="translate(-4024 806)"/>
+  </g>
+</svg>

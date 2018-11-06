@@ -1,0 +1,120 @@
+{% extends 'frontend/base.html.twig' %}
+{% set currentPath = app.request.attributes.get('_route') %}
+
+{% block body %}
+
+
+<div class="uk-background-cover uk-position-relative" data-src="{{ asset('components/header-b.svg') }}" uk-img>
+     {% include 'frontend/components/smallnav.html.twig' %}
+<div class="uk-section uk-section-small"></div>
+<div class="uk-section">
+  <div class="uk-container  tm-container-medium">
+
+<div class="uk-text-center">
+  <div class="uk-width-xlarge@s uk-margin-auto uk-width-1-1">
+    <div class="service-container">
+      <h1 class="title uk-margin-remove">Tenemos productos que se ajustan a ti</h1>
+      <p class="content-description uk-margin-medium">
+        En nuestra tienda encontrará mucha variedad de productos diseñados específicamente para usted y sus necesidades, con la mejor calidad, tiempo de producción y costo.
+      </p>
+   </div>
+ </div>
+</div>
+
+  </div>
+</div>
+
+</div>
+
+
+{#<div class="uk-section" >
+
+<div class="uk-container uk-container-small  uk-container-small">
+
+<h1 class="uk-margin-remove-top uk-margin-medium-bottom title-a">Buscar Producto Específico</h1>
+
+  <form class="uk-grid-small" uk-grid>
+    <div class="uk-width-4-5@s">
+      <div class="uk-inline uk-width-1-1">
+        <a class="uk-form-icon" href="#" uk-icon="icon: search"></a>
+          <input class="uk-input" type="text" placeholder="Términos a buscar">
+      </div>
+    </div>
+    <div class="uk-width-1-5@s">
+        <button class="link-c uk-button">Buscar</button>
+    </div>
+</form>
+
+</div>
+
+</div>#}
+
+<div class="uk-section" >
+
+<div class="uk-container tm-container-medium">
+{#<h1 id="scrolltoProducts" class="uk-text-center title-a uk-width-large uk-margin-large-bottom uk-margin-auto">Enfocados en la mejor calidad y eficiencia.</h1>#}
+<div uk-grid>
+  <div class="uk-width-1-5@s uk-background-cover" data-src="{{ asset('components/pattern-bg.svg') }}" uk-img>
+    <div>
+      <h1 class="uk-margin-remove title-a">Categorías</h1>
+      <p>Selecciona la categoría de tu producto:</p>
+
+      {{ render(controller(
+            'App\\Controller\\ComponentsController::fillProductCategories'
+        )) }}
+    {# most popular products #}
+
+    </div>
+  </div>
+  <div class="uk-width-4-5@s"  >
+
+    <h1 class="uk-margin-remove-top uk-margin-medium-bottom title-a">
+    {% if currentPath == "store" %}Nuestros Productos{% else %}{{ category.name }}{% endif %}
+    </h1>
+
+<div class="uk-child-width-1-1 uk-child-width-1-2@m"  uk-grid>
+  {% for product in products %}
+  {{ include ('frontend/components/product.html.twig', { 'product' : product, 'showbody': true, 'productincart' : false }) }}
+  {% endfor %}
+</div>
+
+
+
+{% if products|length > 0 %}
+
+<ul class="uk-pagination uk-margin-medium-top uk-flex-center" uk-margin>
+{% if currentPage > 1 %}
+  {% if currentPath == "store" %}  <li><a href="{{ path( route , {'page': currentPage - 1}) }}"> {% else %} <li><a href="{{ path( route , {'page': currentPage - 1 , 'categoryId' : category.id}) }}"> {% endif %} <span uk-pagination-previous></span></a></li>
+{% endif %}
+
+{% for index in 1..pagesQuantity %}
+   {% if index == currentPage %}
+    {% if currentPath == "store" %}  <li class="uk-active"><a  href="{{ path(route, {'page': index}) }}">{{ index }}</a></li> {% else %} <li class="uk-active"><a  href="{{ path(route, {'page': index, 'categoryId' : category.id }) }}">{{ index }}</a></li>  {% endif %}
+   {% else %}
+      {% if currentPath == "store" %} <li><a href="{{ path(route, {'page': index}) }}">{{ index }}</a></li> {% else  %} <li><a href="{{ path(route, {'page': index, 'categoryId' : category.id}) }}">{{ index }}</a></li> {% endif %}
+   {% endif %}
+{% endfor %}
+
+{% if currentPage < pagesQuantity %}
+    {% if currentPath == "store" %} <li><a href="{{ path(route, {'page': currentPage + 1}) }}"> {% else %} <li><a href="{{ path( route , {'page': currentPage + 1 , 'categoryId' : category.id}) }}"> {% endif %}  <span uk-pagination-next></span></a></li>
+{% endif %}
+</ul>
+
+{% else %}
+
+<p>No hay productos en esta categoría.</p>
+
+{% endif %}
+
+
+  </div>
+</div>
+
+</div>
+
+</div>
+
+
+
+
+{% endblock %}

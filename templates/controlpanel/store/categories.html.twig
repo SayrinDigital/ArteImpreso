@@ -1,0 +1,195 @@
+{% extends 'controlpanel/base.html.twig' %}
+{% block title %}{{ headertitle }}{% endblock %}
+{% block body %}
+
+<style>
+
+input.uk-input{
+  text-transform: capitalize;
+}
+
+</style>
+
+
+<div>
+
+  <h1 class="title-a uk-margin-remove">Categorías</h1>
+  <p class="content-description uk-margin-remove-top">Administre las categorías de sus productos.</p>
+    <a uk-toggle href="#modal-addcategory" class="link-d uk-margin-small-right" uk-tooltip="Agregar Nueva Categoría de Productos"> <span class="uk-icon uk-margin-small-right"  uk-icon="icon: plus;"></span> Nueva Categoría</a>
+      {#<a href="" class="link-c"> <span class="uk-icon" uk-tooltip="Eliminar" uk-icon="icon: trash;"></span> </a>#}
+
+
+  <div>
+
+    {{ render(controller(
+          'App\\Controller\\ControlPanelController::fillCategories'
+      )) }}
+
+    </div>
+
+</div>
+
+  {# modal to add new category #}
+
+  <div id="modal-addcategory" uk-modal>
+    <div class="uk-modal-dialog">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <div class="uk-modal-header">
+            <h2 class="uk-modal-title">Agregar Categoría</h2>
+        </div>
+        <div class="uk-modal-body">
+          <input id="newcategoryNameInput" type="text" placeholder="Productos" class="uk-input">
+        </div>
+        <div class="uk-modal-footer uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</button>
+            <button id="save-newcategory" class="uk-button uk-button-primary" type="button">Guardar</button>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+var slideUp = {
+ distance: '5%',
+ origin: 'bottom',
+ opacity: 0,
+ delay: 0,
+ interval: 80
+};
+
+ScrollReveal().reveal('.reveal-animation-a', slideUp);
+
+$('#save-newcategory').click(function(){
+
+   var categoryName = $('#newcategoryNameInput').val();
+
+   if(categoryName != "" && categoryName != null){
+
+     $.ajax({
+       type: 'post',
+       url: '{{ path('request-addcategory') }}',
+       dataType: 'json',
+       data: {
+         "categoryName": categoryName
+       },
+       async: true,
+       success: function(data){
+         UIkit.modal("#modal-addcategory").hide();
+         $('#newcategoryNameInput').val("");
+         $('#categories-container').prepend(data.html);
+         ScrollReveal().sync();
+       }
+     });
+
+   }
+
+});
+
+$('.delete-category-button').click(function(){
+
+   var categoryid = $(this).data('categoryid');
+
+   UIkit.modal.confirm('¿Realmente deseas remover este item?', {labels: {'ok': 'Si', 'cancel': 'No!'}}).then(function () {
+
+     $.ajax({
+       type: 'post',
+       url: '{{ path('request-deletecategory') }}',
+       dataType: "json",
+       data: {
+         "categoryId": categoryid
+       },
+       async: true,
+       success: function(data) {
+
+        console.log('Supuestamente eliminó: ' + data.id);
+
+          $('#category-container-' + data.id).remove();
+
+          UIkit.notification({
+            message: 'Categoría Removida',
+            status: 'primary',
+            pos: 'bottom-right',
+            timeout: 2000
+         });
+
+         ScrollReveal().sync();
+
+       }
+     });
+
+       }, function () {
+           console.log('Welcome back')
+       });
+
+});
+
+$('.save-modifiedcategory').click(function(){
+
+    var categoryid = $(this).data('categoryid');
+    var categoryname = $(this).data('categoryname');
+
+        var newName = $('#categoryNameInput-'+categoryid).val();
+
+        console.log(categoryid + " " + newName);
+
+        if(categoryname == newName){
+
+          UIkit.notification({
+            message: 'El nuevo nombre es el mismo',
+            status: 'danger',
+            pos: 'bottom-right',
+            timeout: 1000
+         });
+
+        }
+
+          if(newName == ""){
+           UIkit.notification({
+             message: 'El nuevo nombre no puede estar vacío',
+             status: 'danger',
+             pos: 'bottom-right',
+             timeout: 1000
+          });
+         }
+
+         if(newName != categoryname && newName != ""){
+           $.ajax({
+             type: 'post',
+             url: '{{ path('request-changecategoryname') }}',
+             dataType: "json",
+            data: {
+               "categoryId": categoryid,
+               "categoryName": newName
+             },
+             async: true,
+             success: function(data) {
+
+               UIkit.modal("#modal-changenamecategory-"+categoryid).hide();
+
+             $('#category-container-' + data.id + ' .title-category').text(data.name);
+
+               UIkit.notification({
+                 message: 'Categoría Modificada',
+                 status: 'success',
+                 pos: 'bottom-right',
+                 timeout: 2000
+              });
+
+              ScrollReveal().sync();
+
+             }
+           });
+         }
+
+
+
+
+});
+
+
+</script>
+
+
+{% endblock %}

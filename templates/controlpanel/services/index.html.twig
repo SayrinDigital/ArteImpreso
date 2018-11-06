@@ -1,0 +1,246 @@
+{% extends 'controlpanel/base.html.twig' %}
+{% block title %}{{ headertitle }}{% endblock %}
+{% block body %}
+
+<div>
+
+        <div class="title-a uk-margin-remove">Servicios</div>
+        <p class="content-description uk-margin-remove-top">Administre los servicios que ofrece.</p>
+          <a href="#addservice-modal" uk-toggle class="link-d uk-margin-small-right"> <span class="uk-icon uk-margin-small-right" uk-tooltip="Nuevo" uk-icon="icon: plus;"></span> Nuevo Servicio</a>
+            {#<a href="" class="link-c"> <span class="uk-icon" uk-tooltip="Eliminar" uk-icon="icon: trash;"></span> </a>#}
+
+    <div class="uk-section uk-section-small">
+      <div class="uk-child-width-1-2@s uk-grid-match" uk-grid>
+        {% for service in services %}
+        {{ include ('controlpanel/components/service.html.twig', { 'service' : service  }) }}
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+
+{# modal to add new service #}
+
+<div id="addservice-modal" uk-modal>
+    <div class="uk-modal-dialog">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <div class="uk-modal-header">
+            <h2 class="uk-modal-title">Agregar Servicio</h2>
+        </div>
+        <div class="uk-modal-body">
+          <form id="newservice-form">
+              <fieldset class="uk-fieldset">
+
+                  <div class="uk-margin">
+                      <input id="service_name" class="uk-input" type="text" placeholder="Nombre" required>
+                  </div>
+
+                  <div class="uk-margin">
+                      <input id="service_description" class="uk-input" type="text" placeholder="Descripción" required>
+                  </div>
+
+                  <div class="uk-margin">
+                      <textarea id="service_content" class="editor-content uk-textarea" rows="3" placeholder="Contenido" required></textarea>
+                  </div>
+
+                  <div class="uk-margin" uk-margin>
+            <div uk-form-custom="target: true" class="uk-width-1-1">
+                <input id="service_cover" type="file" required>
+                <input class="uk-input " type="text" placeholder="Seleccionar Imagen Representativa" disabled>
+            </div>
+        </div>
+
+
+              </fieldset>
+          </form>
+                </div>
+        <div class="uk-modal-footer uk-text-right">
+            <button class="uk-modal-close link-d" type="button">Cancelar</button>
+            <button class="link-c" id="save-newservice" type="button">Guardar</button>
+            <div  class="uploadservice-spinner uk-hidden uk-margin-small-left" uk-spinner></div>
+        </div>
+    </div>
+</div>
+
+  <script>
+
+$('#save-newservice').click(function(){
+
+      var form = $('#newservice-form');
+
+      var serviceName = form.find('#service_name').val();
+      var serviceDescription = form.find('#service_description').val();
+      var serviceContent = form.find('#service_content').trumbowyg('html');;
+      var fileData = form.find('#service_cover').get(0).files[0];
+
+      if( (serviceName!="") && (serviceDescription!="") && (fileData!=null) ){
+
+        var service_form_data = new FormData();
+        service_form_data.append('servicename', serviceName);
+        service_form_data.append('servicedescription', serviceDescription);
+        service_form_data.append('servicecover', fileData, fileData.name);
+        service_form_data.append('servicecontent', serviceContent);
+
+        //Lock save button
+
+        $('#save-newservice').addClass('uk-disabled');
+        $('.uploadservice-spinner').removeClass('uk-hidden');
+
+
+        $.ajax({
+                  type: 'post',
+                  url: '{{ path('request-addnewservice') }}',
+                  data: service_form_data,
+                  xhr: function () {
+      var xhr = $.ajaxSettings.xhr();
+      xhr.upload.onprogress = function (e) {
+          // For uploads
+          if (e.lengthComputable) {
+            var progress = (e.loaded / e.total);
+            bar.value = progress;
+          }
+      };
+                  return xhr;
+                 },
+                  processData: false,
+                  async: true,
+                  contentType: false,
+                  cache: false,
+                  success: function(data) {
+                    $('#save-newservice').removeClass('uk-disabled');
+                    $('.uploadservice-spinner').addClass('uk-hidden');
+
+                    UIkit.modal('#addservice-modal').hide();
+
+                    UIkit.notification({
+                      message: 'Nuevo Servicio Agregado',
+                      status: 'primary',
+                      pos: 'bottom-right',
+                      timeout: 2000
+                   });
+
+                    window.location.href = "{{ path('controlpanel-services') }}";
+
+                  }
+                });
+
+
+
+      }else{
+
+        UIkit.notification({
+          message: 'Campos vacíos!',
+          status: 'danger',
+          pos: 'bottom-right',
+          timeout: 1000
+       });
+
+      }
+
+  });
+
+
+//Remove services
+
+  $('.remove-service-button').click(function(){
+
+  var serviceId = $(this).data('serviceid');
+
+  UIkit.modal.confirm('¿Realmente deseas remover este item?', {labels: {'ok': 'Si', 'cancel': 'No!'}}).then(function () {
+
+  console.log(serviceId);
+
+    $.ajax({
+      type: 'post',
+      url: '{{ path('request-deleteservice') }}',
+      dataType: "json",
+     data: {
+        "serviceId": serviceId
+      },
+      async: true,
+      success: function(data) {
+
+       console.log('Supuestamente eliminó: ' + data.id);
+
+         $('#service-container-' + data.id).css('display','none');
+
+         UIkit.notification({
+           message: 'Servicio Removido',
+           status: 'primary',
+           pos: 'bottom-right',
+           timeout: 2000
+        });
+
+      }
+    });
+
+      }, function () {
+          console.log('Welcome back')
+      });
+
+  });
+
+  //Edit service
+
+  $('.edit-service-button').click(function(){
+
+        var serviceid =  $(this).data('serviceid');
+
+        var form = $('#editservice-form-'+serviceid);
+        var serviceName = form.find('#service_name').val();
+        var serviceDescription = form.find('#service_description').val();
+        var serviceContent = form.find('#service_content').trumbowyg('html');;
+        var fileData = form.find('#service_cover').get(0).files[0];
+
+        if( (serviceid!="")){
+
+          var service_form_data = new FormData();
+          service_form_data.append('serviceid', serviceid);
+          service_form_data.append('servicename', serviceName);
+          service_form_data.append('servicedescription', serviceDescription);
+
+          if(fileData!=null){
+          service_form_data.append('servicecover', fileData, fileData.name);
+          }
+
+          service_form_data.append('servicecontent', serviceContent);
+
+          //Lock save button
+
+          $(this).addClass('uk-disabled');
+          $('.editservice-spinner').removeClass('uk-hidden');
+
+          $.ajax({
+                    type: 'post',
+                    url: '{{ path('request-modifyservice') }}',
+                    data: service_form_data,
+                    processData: false,
+                    async: true,
+                    contentType: false,
+                    cache: false,
+                    success: function(data) {
+                      $(this).removeClass('uk-disabled');
+
+                      UIkit.modal('#addservice-modal').hide();
+                      $('.editservice-spinner').addClass('uk-hidden');
+
+                      UIkit.notification({
+                        message: 'Servicio Modificado',
+                        status: 'primary',
+                        pos: 'bottom-right',
+                        timeout: 2000
+                     });
+
+                     window.location.href = "{{ path('controlpanel-services') }}";
+
+                    }
+                  });
+
+        }
+
+    });
+
+  </script>
+
+
+{% endblock %}

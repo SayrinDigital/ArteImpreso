@@ -1,0 +1,129 @@
+{% extends 'frontend/base.html.twig' %}
+
+{% block body %}
+
+<div class="uk-background-cover uk-background-bottom-center uk-position-relative" data-src="{{ asset('components/header-f.svg') }}" uk-img>
+
+{% include 'frontend/components/smallnav.html.twig' %}
+
+  <div class="uk-container header-b  tm-container-medium">
+
+<div class="uk-flex uk-flex-center uk-flex-middle uk-text-center header-b">
+  <div class="uk-width-xlarge">
+    <div class="service-container light">
+      <h1 class="title uk-margin-remove">Contáctanos</h1>
+   </div>
+ </div>
+</div>
+
+  </div>
+
+</div>
+
+  <div class="uk-section uk-background-cover" data-src="{{ asset('components/background-service-b.svg') }}" uk-img >
+
+<div class="uk-container tm-container-medium">
+  <div class="uk-child-width-1-2@m uk-grid-large uk-margin-large-top uk-flex uk-flex-middle uk-margin-large-top" uk-grid>
+
+   <div>
+
+
+   </div>
+   <div>
+     <div>
+
+          <div class="service-container uk-inline uk-width-large">
+            <div>
+              <h1 class="title-a">Contáctanos</h1>
+              <p>Déjanos tus datos y nos contactaremos contigo a la brevedad.</p>
+              <form class="uk-grid-small" uk-grid>
+               <div class="uk-width-1-1">
+                   <input class="uk-input" id="name" type="text" placeholder="Nombre Completo">
+               </div>
+               <div class="uk-width-1-2@s">
+                   <input class="uk-input" id="phone" type="text" placeholder="Teléfono">
+               </div>
+               <div class="uk-width-1-2@s">
+                   <input class="uk-input" id="mail" type="text" placeholder="Correo">
+               </div>
+               <div class="uk-width-1-1">
+                      <textarea class="uk-textarea" id="message" rows="5" placeholder="Mensaje"></textarea>
+                  </div>
+                  <div class="uk-margin-medium-top">
+                    <a id="sendmail-button" class="link-c">Enviar</a>
+                    <div id="loader" class="uk-hidden uk-margin-small-left" uk-spinner></div>
+                  </div>
+              </form>
+            </div>
+          </div>
+
+     </div>
+   </div>
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+   $('#sendmail-button').click(function(){
+
+
+      var name = $('#name').val();
+      var phone = $('#phone').val();
+      var mail = $('#mail').val();
+      var message = $('#message').val();
+
+   if(name!="" && mail!="" && message!=""){
+
+     $(this).addClass('uk-disabled');
+     $('#loader').removeClass('uk-hidden');
+
+     var contact_form_data = new FormData();
+     contact_form_data.append('name', name);
+     contact_form_data.append('phone', phone);
+     contact_form_data.append('mail', mail);
+     contact_form_data.append('message', message);
+
+     $.ajax({
+       type: 'post',
+       url: '{{ path('request-sendcontactmail') }}',
+       data: contact_form_data,
+       processData: false,
+       async: true,
+       contentType: false,
+       cache: false,
+       success: function(data){
+
+           $('#sendmail-button').removeClass('uk-disabled');
+           $('#loader').addClass('uk-hidden');
+
+         UIkit.notification({
+           message: 'Recibimos tu mail',
+           status: 'primary',
+           pos: 'bottom-right',
+           timeout: 2000
+        });
+
+       }
+     });
+   }else{
+
+     UIkit.notification({
+       message: 'Hay Campos Vacíos',
+       status: 'danger',
+       pos: 'bottom-right',
+       timeout: 2000
+    });
+
+   }
+
+   });
+
+</script>
+
+
+
+
+{% endblock %}

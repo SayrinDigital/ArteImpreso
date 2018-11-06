@@ -1,0 +1,104 @@
+<footer>
+  <div class="uk-section uk-section-large">
+    <div class="uk-container tm-container-medium">
+      <div uk-grid>
+        <div class="uk-width-2-5@s">
+          <div>
+            <h1 class="theme-dark title-a uk-margin-remove">¿Tienes una idea?</h1>
+            <h1 class="theme-muted title-a uk-margin-remove-top uk-margin-large-bottom">Conversemos</h1>
+            <a class="link-c uk-button uk-margin-large-top" href="{{ path('contact') }}">
+              <span class="uk-icon" uk-icon="icon: minus;"></span>
+              Cuéntanos todo</a>
+
+          </div>
+        </div>
+        <div class="uk-width-3-5@s">
+          <div>
+            <div class="uk-child-width-1-2 uk-child-width-1-4@s footer-nav" uk-grid="uk-grid">
+              <div>
+                <div>
+                  <ul class="uk-nav uk-nav-default">
+                    <li class="uk-nav-header">Servicios</li>
+                    {% for service in services %}
+                    <li><a href="{{ path('services', { 'serviceId' : service.id }) }}">{{ service.name }}</a></li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <ul class="uk-nav uk-nav-default">
+                    <li class="uk-nav-header">Productos</li>
+                    {% for category in categories %}
+                    <li><a href="{{ path('storebycategory', { 'page' : 1, 'categoryId' : category.id }) }}">{{ category.name }}</a></li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <ul class="uk-nav uk-nav-default">
+                    <li class="uk-nav-header">Cliente</li>
+                    <li>
+                      <a href="{{ path('contact') }}">Consultas</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <ul class="uk-nav uk-nav-default">
+                    <li class="uk-nav-header">Links de Interés</li>
+                    <li>
+                      <a href="https://accounts.zoho.com/signin?servicename=VirtualOffice&signupurl=https://workplace.zoho.com/orgsignup.do?signup.html">Mail</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr class="uk-margin-large">
+
+      <nav class="uk-navbar-container uk-navbar-transparent footer" uk-navbar>
+          <div class="uk-navbar-left">
+
+              <ul class="uk-navbar-nav">
+                  <li class="uk-active">
+                    <a href="#">
+                                  <img style="height: 40px;" src="/images/components/mainlogo.svg" class="uk-logo" uk-img alt="">
+                                </a>
+                  </li>
+              </ul>
+
+          </div>
+          <div class="uk-navbar-right">
+
+              <ul class="uk-navbar-nav">
+                  <li>
+                      <a href="#">Políticas de Privacidad</a>
+                  </li>
+                  <li>
+                      <a href="https://www.instagram.com/sayrin_digital/" uk-icon="instagram"></a>
+                  </li>
+                  <li>
+                      <a href="https://www.facebook.com/sayrin.cl/" uk-icon="facebook"></a>
+                  </li>
+                  <li>
+                      <a href="#" uk-icon="youtube"></a>
+                  </li>
+                  <li>
+                      <a href="#" uk-icon="dribbble"></a>
+                  </li>
+              </ul>
+          </div>
+      </nav>
+
+    </div>
+  </div>
+
+  <img src="{{ asset('components/footer-image.svg') }}" alt="">
+
+
+</footer>

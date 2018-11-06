@@ -1,0 +1,61 @@
+{% extends 'frontend/base.html.twig' %}
+
+{% block body %}
+
+<div class="uk-section uk-section-large uk-background-cover" data-src="{{ asset('components/background-service-b.svg') }}"  uk-img>
+
+<div class="uk-container tm-container-medium">
+  <div class=" uk-child-width-1-2@s uk-flex uk-flex-middle" uk-grid>
+
+    <div class="card-payment_checkout uk-margin-large uk-height-medium uk-flex uk-flex-center uk-flex-middle"  uk-img>
+
+      <div class="uk-flex uk-flex-middle uk-flex-center">
+        <p class="uk-margin-remove title-a">
+              ${{ app.session.get('TotalToPay')|number_format(0) }} CLP
+        </p>
+      </div>
+
+    </div>
+
+    <div>
+      <h1 class="title-a">Seleccionar Método de Pago</h1>
+      <div class="uk-margin payment-options">
+         <div class="option selected uk-flex uk-flex-middle">
+           <img src="https://www.elviscaballero.com/tienda_online/wp-content/uploads/2016/09/logo-webpay-plus-3-copy.png" uk-img alt="" class="">
+         </div>
+     </div>
+
+     <div>
+      <div>
+        <h1 class="title-a">Datos del Cliente</h1>
+        <form class="uk-grid-small" uk-grid>
+         <div class="uk-width-1-1">
+             <input class="uk-input" type="text" placeholder="Nombre Completo">
+         </div>
+         <div class="uk-width-1-2@s">
+             <input class="uk-input" type="text" placeholder="Dirección">
+         </div>
+         <div class="uk-width-1-4@s">
+             <input class="uk-input" type="text" placeholder="Teléfono">
+         </div>
+         <div class="uk-width-1-4@s">
+             <input class="uk-input" type="text" placeholder="Correo">
+         </div>
+         <div class="uk-width-1-1">
+                <textarea class="uk-textarea" rows="5" placeholder="Indicaciones"></textarea>
+            </div>
+            <div class="uk-margin-medium-top">
+              <a href="{{ path('store-checkout-flow') }}" class="link-c"> Pagar</a>
+            </div>
+        </form>
+      </div>
+     </div>
+
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+{% endblock %}

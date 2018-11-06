@@ -1,0 +1,83 @@
+
+<div id="product-container-{{ product.id }}" class="reveal-animation-a">
+
+    <div class="uk-card uk-card-default  product-card">
+        <div class="uk-card-media-top">
+            <div class="uk-background-cover uk-height-medium" data-src="{{ asset('uploads/productcovers/' ~ product.cover) }}" uk-img>
+
+            </div>
+        </div>
+
+        <div class="uk-card-body uk-background-cover" data-src="{{ asset('components/product-bg.svg') }}" uk-img>
+                      <h3 class="uk-card-title uk-margin-remove">{{ product.name|capitalize }}</h3>
+            <p class="category  uk-margin-remove-top uk-margin-medium-top">{{ product.category.name }}</p>
+
+                            <div class="uk-text-center">
+
+                              <a href="#product-modal-edit-{{ product.id }}" uk-toggle class="link-d uk-margin-small-right"> <span class="uk-icon" uk-tooltip="Editar" uk-icon="icon: pencil;"></span> </a>
+                                <a class="delete-product-button link-c" data-productid="{{ product.id }}"> <span class="uk-icon" uk-tooltip="Eliminar" uk-icon="icon: trash;"></span> </a>
+
+                            </div>
+        </div>
+
+        <div class="uk-card-footer">
+          <p class="price"><span class=" uk-icon uk-margin-small-right" uk-icon="icon: cart;"></span> $<span class="price-text"> {{ product.price|number_format(0) }} </span></p>
+        </div>
+
+
+    </div>
+
+</div>
+
+<div id="product-modal-edit-{{ product.id }}" uk-modal>
+    <div class="uk-modal-dialog">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <div class="uk-modal-header">
+            <h2 class="uk-modal-title">Modificar Producto</h2>
+        </div>
+        <div class="uk-modal-body">
+          <form >
+              <fieldset class="uk-fieldset">
+
+                  <div class="uk-margin">
+                      <input class="uk-input" id="product-name-{{ product.id }}" type="text" placeholder="Nombre" value="{{ product.name }}" required>
+                  </div>
+
+                  <div class="uk-margin">
+                      <input class="uk-input" id="product-price-{{ product.id }}" type="text" placeholder="Precio" value="{{ product.price }}" required>
+                  </div>
+                  <div class="uk-margin">
+                      <textarea class="uk-textarea" id="product-desc-{{ product.id }}" rows="2" type="text" placeholder="Descripción" required>{{ product.description }}</textarea>
+
+                  </div>
+
+                  <div class="uk-margin">
+
+      <div class="uk-margin">
+          <select class="uk-select" id="product-category-{{ product.id }}">
+              <option value="{{ product.category.id }}" hidden selected>{{ product.category.name }}</option>
+              {{ render(controller(
+                    'App\\Controller\\ControlPanelController::fillProductCategoriesProduct'
+                )) }}
+          </select>
+      </div>
+                  </div>
+
+                  {#<div class="uk-margin" uk-margin>
+            <div uk-form-custom="target: true" class="uk-width-1-1">
+                <input  type="file" required>
+                <input class="uk-input" type="text" placeholder="{{ product.cover }}" disabled>
+            </div>
+        </div> #}
+
+
+              </fieldset>
+          </form>
+                </div>
+        <div class="uk-modal-footer uk-text-right">
+            <button class="uk-modal-close link-d" type="button">Cancelar</button>
+            <button class="link-c save-modifiedservice-button" data-productid="{{ product.id }}" type="button">Guardar</button>
+            <progress id="uploadservice-progressbar" class="uk-progress" value="0" max="1"></progress>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+
+    <li class="uk-parent">
+        <a href="{{ path('controlpanel-categories') }}">Categorías</a>
+        <ul class="uk-nav-sub">
+          {% for category in categories %}
+            <li><a class="uk-text-capitalize" href="{{ path('controlpanel-categorybyid', {'categoryId' : category.id}) }}">{{ category.name }}</a></li>
+          {% endfor %}
+        </ul>
+    </li>

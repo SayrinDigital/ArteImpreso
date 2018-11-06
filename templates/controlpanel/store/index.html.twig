@@ -1,0 +1,247 @@
+{% extends 'controlpanel/base.html.twig' %}
+{% block title %}{{ headertitle }}{% endblock %}
+{% block body %}
+
+<div>
+
+        <div class="title-a uk-margin-remove">{{ category.name }}</div>
+        <p class="content-description uk-margin-remove-top">Lleva el control total de tus productos seccionados por la categoría específica</p>
+        <a href="#addproduct-modal" uk-toggle class="link-d uk-margin-small-right"> <span class="uk-icon uk-margin-small-right" uk-tooltip="Nuevo" uk-icon="icon: plus;"></span> Nuevo Producto</a>
+
+  <div class="uk-section uk-section-small">
+
+    <div class="uk-child-width-1-3@s uk-grid-match" id="products-container" uk-grid>
+      {% for product in category.products %}
+      {{ include ('controlpanel/components/product.html.twig', { 'product' : product  }) }}
+      {% endfor %}
+    </div>
+
+  </div>
+
+  </div>
+
+  {# modal to add new product #}
+
+  <div id="addproduct-modal" uk-modal>
+      <div class="uk-modal-dialog">
+          <button class="uk-modal-close-default" type="button" uk-close></button>
+          <div class="uk-modal-header">
+              <h2 class="uk-modal-title">Agregar Producto en {{ category.name }}</h2>
+          </div>
+          <div class="uk-modal-body">
+            <form id="newproduct-form">
+                <fieldset class="uk-fieldset">
+
+                  <div class="uk-margin">
+                      <input class="uk-input" id="productname" type="text" placeholder="Nombre" required>
+                  </div>
+
+                  <div class="uk-margin">
+                      <input class="uk-input" id="productprice" type="text" placeholder="Precio (15990)" required>
+                  </div>
+
+                  <div class="uk-margin">
+
+      <div class="uk-margin">
+          <select id="categoryoption" class="uk-select">
+            <option value="{{ category.id }}" hidden selected>{{ category.name }}</option>
+              {{ render(controller(
+                    'App\\Controller\\ControlPanelController::fillProductCategoriesProduct'
+                )) }}
+          </select>
+      </div>
+
+      <div class="uk-margin">
+          <textarea class="uk-textarea" rows="2" id="productdescription" type="text" placeholder="Descripción" required></textarea>
+
+      </div>
+
+                    <div class="uk-margin" uk-margin>
+              <div uk-form-custom="target: true" class="uk-width-1-1">
+                  <input id="productcover" type="file" multiple required>
+                  <input class="uk-input " type="text" placeholder="Seleccionar Imagenes Representativas" disabled>
+              </div>
+          </div>
+
+                </fieldset>
+            </form>
+                  </div>
+          <div class="uk-modal-footer uk-text-right">
+              <button class="uk-modal-close link-d" type="button">Cancelar</button>
+              <button class="link-c" id="save-newproduct" type="button">Guardar</button>
+              <div id="uploadSpinnerProduct" class="uk-hidden" uk-spinner></div>
+          </div>
+      </div>
+  </div>
+
+<script>
+
+var slideUp = {
+ distance: '5%',
+ origin: 'bottom',
+ opacity: 0,
+ delay: 0,
+ interval: 80
+};
+
+ScrollReveal().reveal('.reveal-animation-a', slideUp);
+
+$('#save-newproduct').click(function(){
+
+  var productName = $('#productname').val();
+  var productPrice = $('#productprice').val();
+  var productCategoryOption = $('#categoryoption').val();
+  var productDescription = $('#productdescription').val();
+  var fileData = $('#productcover').get(0).files[0];
+  //var fileDataSmall = $('#productcover').get(0).files[1];
+
+  if( (productName!="") && (productPrice!="") && (productCategoryOption!="")){
+
+    //console.log($('#productcover').get(0).files.length);
+
+    //if( $('#productcover').get(0).files.length==2){
+
+      var product_form_data = new FormData();
+      product_form_data.append('productname', productName);
+      product_form_data.append('productprice', productPrice);
+      product_form_data.append('productcategoryoption', productCategoryOption);
+      product_form_data.append('productdescription', productDescription);
+      product_form_data.append('productcover', fileData, fileData.name);
+      //product_form_data.append('productcoversmall', fileDataSmall, fileDataSmall.name);
+
+      $('#save-newproduct').addClass('uk-disabled');
+      $('#uploadSpinnerProduct').removeClass('uk-hidden');
+
+      $.ajax({
+                type: 'post',
+                url: '{{ path('request-addnewproduct') }}',
+                data: product_form_data,
+               processData: false,
+               async: true,
+               contentType: false,
+               cache: false,
+                success: function(data) {
+                  $('#save-newproduct').removeClass('uk-disabled');
+
+                  UIkit.modal('#addproduct-modal').hide();
+
+                 $('#uploadSpinnerProduct').addClass('uk-hidden');
+
+                  UIkit.notification({
+                    message: 'Nuevo Producto Agregado',
+                    status: 'primary',
+                    pos: 'bottom-right',
+                    timeout: 2000
+                 });
+
+                  window.location.href = "{{ path('controlpanel-categorybyid', { 'categoryId' : category.id }) }}";
+
+                }
+              });
+
+    /*}
+    else{
+
+    UIkit.notification({
+      message: 'Necesitas subir 2 imágenes!',
+      status: 'danger',
+      pos: 'bottom-right',
+      timeout: 1000
+   });
+
+ }*/
+ }
+ else{
+
+ UIkit.notification({
+   message: 'Campos vacíos!',
+   status: 'danger',
+   pos: 'bottom-right',
+   timeout: 1000
+});
+
+}
+
+});
+
+$('.delete-product-button').click(function(){
+
+    var productId = $(this).data('productid');
+
+    UIkit.modal.confirm('¿Realmente deseas remover este producto?', {labels: {'ok': 'Si', 'cancel': 'No!'}}).then(function () {
+
+      $.ajax({
+        type: 'post',
+        url: '{{ path('request-deleteproduct') }}',
+        dataType: "json",
+       data: {
+          "productid": productId
+        },
+        async: true,
+        success: function(data) {
+
+           $('#product-container-' + data.id).remove();
+
+           UIkit.notification({
+             message: 'Producto Removido',
+             status: 'primary',
+             pos: 'bottom-right',
+             timeout: 2000
+          });
+
+            ScrollReveal().sync();
+
+        }
+      });
+
+        }, function () {
+
+        });
+
+});
+
+$('.save-modifiedservice-button').click(function(){
+
+   var productId = $(this).data('productid');
+
+   var newName = $('#product-name-' + productId).val();
+   var newPrice = $('#product-price-' + productId).val();
+   var newDesc = $('#product-desc-' + productId).val();
+   var newCategory = $('#product-category-' + productId).val();
+
+   $.ajax({
+     type: 'post',
+     url: '{{ path('request-modifyproduct') }}',
+     dataType: "json",
+    data: {
+       "productid": productId,
+       "productname": newName,
+       "productprice": newPrice,
+       "productcategory": newCategory,
+       "productdescription": newDesc
+     },
+     async: true,
+     success: function(data) {
+
+    UIkit.modal('#product-modal-edit-'+productId).hide();
+
+     $('#product-container-'+data.id + ' .title').text(newName);
+     $('#product-container-'+data.id + ' .price-text').text(newPrice);
+
+        UIkit.notification({
+          message: 'Producto Modificado',
+          status: 'primary',
+          pos: 'bottom-right',
+          timeout: 2000
+       });
+
+         ScrollReveal().sync();
+
+     }
+   });
+
+});
+
+</script>
+
+{% endblock %}

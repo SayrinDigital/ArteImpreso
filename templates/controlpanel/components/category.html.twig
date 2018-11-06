@@ -1,0 +1,46 @@
+
+<div id="category-container-{{ category.id }}" class="reveal-animation-a uk-inline">
+
+<a href="{{ path('controlpanel-categorybyid', {'categoryId' : category.id}) }}" class="uk-box-shadow-hover-large">
+
+  <div class="uk-background-cover uk-border-rounded uk-overflow-hidden" data-src="{{ asset('components/category-bg-' ~ random(['0','1']) ~'.svg') }}" uk-img>
+    <div class="uk-padding">
+      <div class="uk-flex uk-flex-middle uk-flex-center uk-text-center">
+        <div class="service-container light">
+                  <p class="content-description uk-text-capitalize uk-margin-remove title-category">{{ category.name }}</p>
+                  <p class="content-description small uk-text-capitalize uk-margin-remove">{{ category.products|length }} Productos</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</a>
+
+<div uk-dropdown="top-justify">
+    <ul class="uk-nav uk-dropdown-nav">
+        <li class="uk-nav-header">Acciones</li>
+        <li><a href="{{ path('controlpanel-categorybyid', {'categoryId' : category.id}) }}">Agregar Productos</a></li>
+        <li class="uk-nav-divider"></li>
+        <li><a  class="changename-category-button" uk-toggle href="#modal-changenamecategory-{{ category.id }}">Cambiar Nombre</a></li>
+        <li><a data-categoryid="{{ category.id }}" class="delete-category-button" href="#">Eliminar</a></li>
+    </ul>
+</div>
+
+</div>
+
+<div id="modal-changenamecategory-{{ category.id }}" uk-modal>
+  <div class="uk-modal-dialog">
+      <button class="uk-modal-close-default" type="button" uk-close></button>
+      <div class="uk-modal-header">
+          <h2 class="uk-modal-title">Cambiar Nombre</h2>
+      </div>
+      <div class="uk-modal-body">
+        <input id="categoryNameInput-{{ category.id }}" type="text" placeholder="Productos" value="{{ category.name }}" class="uk-input">
+      </div>
+      <div class="uk-modal-footer uk-text-right">
+          <button class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</button>
+          <button data-categoryid="{{ category.id }}" data-categoryname="{{ category.name }}" class=" save-modifiedcategory uk-button uk-button-primary" type="button">Guardar</button>
+      </div>
+  </div>
+</div>

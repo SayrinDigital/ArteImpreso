@@ -1,0 +1,13 @@
+<li class="pages-nav__item"><a class="link link--page" href="{{ path('home') }}">Inicio</a></li>
+{% for service in services %}
+<li class="pages-nav__item"><a class="link link--page" href="{{ path('services', { 'serviceId' : service.id }) }}">{{ service.name }}</a></li>
+{% endfor %}
+<li><a class="link link--page" href="{{ path('store') }}">Tienda</a></li>
+{% if categories|length > 0 %}
+  {% for category in categories %}
+  <li ><a href="{{ path('storebycategory', { 'page' : 1,  'categoryId' : category.id }) }}">{{ category.name }}</a></li>
+  {% endfor %}
+{% endif %}
+<li><a  href="{{ path('store-cart') }}">Carro ({{ app.session.get('ProductIDs')|length }})</a></li>
+<li><a  href="{{ path('contact') }}">Contacto</a></li>
+<li><a class="" href="">Mail</a></li>

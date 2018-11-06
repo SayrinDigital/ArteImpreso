@@ -1,0 +1,127 @@
+{% extends 'frontend/base.html.twig' %}
+
+{% block body %}
+
+<div class="uk-background-cover  uk-position-relative" data-src="{{ asset('components/header-b.svg') }}" uk-img>
+
+{% include 'frontend/components/smallnav.html.twig' %}
+
+  <div class="uk-container header-b  tm-container-medium">
+
+<div class="uk-flex uk-flex-center uk-flex-middle uk-text-center header-b">
+  <div class="uk-width-xlarge">
+    <div class="service-container">
+      <h1 class="title uk-margin-remove">Carro de Compras</h1>
+      <p class="content-description uk-margin-remove-top">
+        Revisa el resumen de tu pedido y procede a realizar el pago.
+      </p>
+   </div>
+ </div>
+</div>
+
+  </div>
+
+</div>
+
+{% if app.session.get('ProductIDs')|length > 0  %}
+
+<div class="uk-section  uk-section-small">
+
+<div class="uk-container tm-container-medium">
+
+    <h1 class="title-a">Resumen de Tu Pedido</h1>
+    <div class="uk-margin-large-bottom">
+            <a class="link-d uk-button" id="checkout-button"> <span class="uk-icon uk-margin-small-right" uk-icon="icon: credit-card"></span> Proceder a Pagar</a>
+      <a class="link-c uk-button" href="{{ path('store-clear-cart') }}"><span class="uk-icon uk-margin-small-right" uk-icon="icon: trash"></span> Limpiar Carro</a>
+    </div>
+
+    <div class="" uk-slider>
+
+        <div class="uk-position-relative uk-visible-toggle">
+
+            <ul class="uk-slider-items uk-child-width-1-1 uk-child-width-1-2@m  uk-grid uk-padding-small">
+              {% for product in products %}
+            <li class="product-cart">  {{ include ('frontend/components/product.html.twig', { 'product' : product, 'showbody': true, 'productincart' : true }) }} </li>
+              {% endfor %}
+            </ul>
+
+            <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slider-item="previous"></a>
+            <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slider-item="next"></a>
+
+        </div>
+
+        <ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin"></ul>
+
+    </div>
+
+
+</div>
+
+</div>
+
+
+
+
+
+
+{% else %}
+
+
+<div class="uk-section">
+  <div class="uk-container tm-container-medium uk-text-center">
+
+<h1 class="title-a">Carro Vacío</h1>
+<div><a class="link-c" href="{{ path('store') }}"> <span class="uk-icon uk-margin-small-right" uk-icon="icon: arrow-left"></span> Volver A La Tienda</a></div>
+  </div>
+</div>
+
+{% endif %}
+
+<script>
+
+   $('.units-input').change(function(){
+
+      var productId = $(this).data('productid');
+      var initialPrice = $(this).data('initialprice');
+
+      var quantity = $(this).val();
+            $('#price_value-'+productId).text(initialPrice * quantity);
+
+   });
+
+   $('#checkout-button').click(function(){
+
+     var dataList = $(".product-card").map(function() {
+  return $(this).find('.units-input').val() * $(this).find('.units-input').data('initialprice');
+}).get();
+
+console.log(dataList);
+
+var total = 0;
+for(var i = 0; i < dataList.length; i++){
+  total += dataList[i] << 0;
+}
+
+console.log(total)
+
+$.ajax({
+  type: 'post',
+  url: '{{ path('store-resume-sale') }}',
+  dataType: "json",
+ data: {
+    "total": total
+  },
+  async: true,
+  success: function(data) {
+
+   window.location.href = "{{ path('store-checkout') }}";
+
+  }
+});
+
+   });
+
+</script>
+
+
+{% endblock %}

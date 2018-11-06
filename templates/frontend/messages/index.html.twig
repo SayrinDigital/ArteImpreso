@@ -1,0 +1,19 @@
+{% extends 'frontend/base.html.twig' %}
+
+{% block body %}
+
+<div class="uk-height-viewport uk-flex uk-flex-middle uk-flex-center uk-background-cover"  data-src="{{ asset('components/background-service-b.svg') }}"  uk-img>
+
+  <div class="uk-section uk-section-large">
+
+     <div class="uk-text-center uk-width-large">
+       <h1 class="title-a">{{ title }}</h1>
+       <p class="uk-margin-medium-bottom">{{ message }}</p>
+       <a href="{{ path('home') }}" class="link-c">Volver</a>
+     </div>
+
+  </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,179 @@
+{% extends 'frontend/base.html.twig' %}
+
+{% block body %}
+
+  <div class="uk-background-cover" uk-height-viewport uk-img data-src="{{ asset('components/header.svg') }}">
+    <div class="uk-section">
+			<div class="uk-margin-auto">
+	                <div class="uk-padding-large uk-text-center">
+	                  <div class="">
+	                    <h1 class="title uk-margin-remove">Experimenta el</h1>
+	                    <h1 class="title uk-margin-remove">arte real</h1>
+	                    <p class="uk-width-xlarge uk-margin-auto">
+	                      Somos una empresa líder  en el servicio al cliente, impresión y terminaciones de alta calidad. Enfocados en la mejor calidad y eficiencia en la entrega de productos y servicios.
+	                    </p>
+	                    <a href="{{ path('store') }}" class="link-c uk-button uk-button-large uk-margin-small-right">Visita Nuestra Tienda</a>
+											<a href="{{ path('store') }}" class="link-a uk-button uk-button-large">Contáctanos</a>
+	                  </div>
+	                </div>
+	          </div>
+    </div>
+  </div>
+
+
+<div class="uk-section uk-section-large">
+
+<div class="uk-container tm-container-medium">
+
+<div class="uk-width-3-5 uk-margin-auto">
+  <h1 class="uk-text-center title">¿Cómo te podemos ayudar?</h1>
+</div>
+
+
+
+</div>
+</div>
+
+{% include 'frontend/components/services.html.twig' with { "orientation" : "left", "service" : services[0], "position" : 0 } %}
+{% include 'frontend/components/services.html.twig' with { "orientation" : "right", "service" : services[1], "position" : 1 } %}
+{% include 'frontend/components/services.html.twig' with { "orientation" : "left", "service" : services[2], "position" : 2 } %}
+
+
+<div class="uk-section">
+
+<div class="uk-container tm-container-medium uk-text-center uk-container-small">
+
+    <img src="{{ asset('components/icon-a.svg') }}"  alt="" uk-img>
+
+    <div class="uk-child-width-1-3@s uk-grid-match" uk-scrollspy="cls: uk-animation-slide-bottom; target: div; delay: 200;" uk-grid>
+      <div>
+        <div class="uk-card uk-card-body uk-border-rounded uk-box-shadow-medium uk-overflow-hidden">
+          <div class="circle-option uk-margin-auto" style="border: 25px solid #1d98d5;"></div>
+          <h3>Eficiencia</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium aspernatur, mollitia! Aspernatur.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="uk-card uk-card-body uk-border-rounded uk-box-shadow-medium uk-overflow-hidden">
+<div class="circle-option uk-margin-auto" style="border: 25px solid #e8c42b;"></div>
+          <h3>Responsabilidad</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium aspernatur, mollitia! Aspernatur.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="uk-card uk-card-body uk-border-rounded uk-box-shadow-medium uk-overflow-hidden">
+<div class="circle-option uk-margin-auto" style="border: 25px solid #eb387e;"></div>
+          <h3>Rápidez</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium aspernatur, mollitia! Aspernatur.</p>
+        </div>
+      </div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<div class="uk-section uk-section-large uk-background-cover"  uk-img>
+
+ <div class="">
+   <h1 class="uk-text-center title-b uk-width-3-5 uk-margin-auto">Enfocados en la mejor calidad y eficiencia
+ en la entrega de productos.</h1>
+   <p class="uk-text-center uk-margin-small-top uk-margin-large-bottom">Tenemos todas las herramientas para crear productos que se ajustan a tus necesidades.</p>
+
+   <div class="uk-section">
+
+     <div class="uk-text-center uk-grid-collapse uk-grid-large uk-flex uk-flex-middle" uk-grid>
+
+        <div class="uk-width-3-5@s">
+
+          <div>
+     <div>
+       <div class="uk-child-width-1-2" uk-grid="parallax: 200">
+         <div>
+           <div><img uk-img src="https://sayrin.cl/images/product-a.png" alt=""></div>
+         </div>
+         <div>
+           <div><img uk-img src="https://sayrin.cl/images/product-b.png" alt=""></div>
+         </div>
+       </div>
+     </div>
+   </div>
+
+        </div>
+        <div class="uk-width-2-5@s">
+          <div class="uk-text-center">
+              <div class="uk-inline uk-width-large">
+                <div class="service-container uk-position-relative">
+
+                  <div class="uk-position-top-right"  >
+                    <img class="uk-height-small"  src="{{ asset('components/dots-right.svg') }}" alt="">
+                  </div>
+
+                   <div uk-scrollspy="cls: uk-animation-slide-bottom; target: .anim; delay: 200;">
+                     <p class="subtitle title uk-margin-remove anim">04</p>
+                    <h1 class="title-b uk-margin anim">Nuestra Tienda</h1>
+                    <p class="content-description uk-margin-remove anim">
+                      Tenemos los perfectos items destinados a los diversos puntos que usted vaya a necesitar en su negocio, stand o empresa.
+                    </p>
+
+                    <div class="uk-margin-top anim">
+                      <a class="link-c uk-button  uk-button " href="{{ path('store') }}">Visitar Nuestra Tienda</a>
+                    </div>
+                   </div>
+               </div>
+
+              </div>
+          </div>
+        </div>
+
+     </div>
+
+   </div>
+
+ </div>
+
+</div>
+
+{#<div class="uk-section  uk-section-large uk-background-cover uk-background-bottom-center" data-src="{{ asset('components/bottom-shadow.svg') }}" uk-img></div>#}
+
+<div class="uk-section uk-section-large">
+  <div class="uk-container tm-container-medium uk-text-center">
+
+<div class="uk-width-large uk-margin-auto">
+  <h1 class="uk-text-center title-b uk-width-large uk-margin-auto">¿A dónde queremos llegar?</h1>
+  <p class="uk-text-center uk-margin-small-top uk-margin-large-bottom">Ser líderes en la calidad y servicio hacia nuestros clientes, brindándoles la confianza necesaria. Mediante una excelencia operacional y eficiencia garantizada.</p>
+
+</div>
+
+  </div>
+
+ </div>
+
+ {% include 'frontend/components/services.html.twig' with { "orientation" : "left", "service" : services[3], "position" : 4 } %}
+ {% include 'frontend/components/services.html.twig' with { "orientation" : "right", "service" : services[4], "position" : 5 } %}
+
+
+      <hr class="uk-margin-large">
+
+<div class="uk-section uk-section-large uk-text-center uk-background-cover" data-src="{{ asset('components/bg-e.svg') }}" uk-img>
+
+<div class="uk-container  tm-container-medium uk-margin-large-top uk-margin-large-bottom">
+
+  <h1 class="uk-margin-large title-a uk-width-large uk-margin-auto">
+    Acércate a nosotros, recibirás el mejor servicio y calidad
+  </h1>
+
+</div>
+
+</div>
+
+{% include 'frontend/components/services.html.twig' with { "orientation" : "left", "service" : services[5], "position" : 6 } %}
+{% include 'frontend/components/services.html.twig' with { "orientation" : "right", "service" : services[6], "position" : 7 } %}
+
+
+
+{% endblock %}

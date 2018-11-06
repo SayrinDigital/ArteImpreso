@@ -1,0 +1,60 @@
+<style>
+
+.nav-container{
+  position: absolute;
+  width: 100%;
+  z-index: 99999;
+}
+
+.uk-navbar-nav>li>a{
+  text-transform: capitalize;
+}
+
+.active-nav{
+  box-shadow: 0px 10px 20px rgba(0,0,0,0.1);
+  background: #fff;
+}
+
+.disabled-nav{
+  box-shadow: 0 0 0 rgba(0,0,0,0);
+  background: transparent;
+}
+
+.disabled-nav .uk-navbar-nav>li>a{
+  color: #333;
+}
+
+
+
+</style>
+
+{% set currentPath = app.request.get('_route') %}
+
+
+<div class="nav-container" uk-sticky="animation: uk-animation-slide-top; sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky active-nav; cls-inactive: disabled-nav; top: 200">
+
+  <div class="uk-position-relative">
+    <nav class="uk-navbar-container uk-dark uk-navbar-transparent" uk-navbar>
+
+        <div class="uk-navbar-left">
+
+        <a class="uk-navbar-item uk-logo" href="{{ path('home') }}"><img class="" width="40px" src="{{ asset('components/logo.svg') }}" uk-img alt=""></a>
+
+    </div>
+
+    <div class="uk-navbar-right uk-visible@s">
+        <ul class="uk-navbar-nav">
+            <li {% if currentPath=="home" %} class="uk-active" {% endif %} ><a href="{{ path('home') }}">Portada</a></li>
+              <li {% if currentPath=="store" %} class="uk-active" {% endif %} ><a href="{{ path('store') }}">Tienda</a></li>
+              <li {% if currentPath=="contact" %} class="uk-active" {% endif %} ><a href="{{ path('contact') }}">Contacto</a></li>
+        </ul>
+        <div class="uk-navbar-item">
+          <div><a class="link-c uk-button uk-button-large" href="{{ path('store-cart') }}"> <span class="uk-margin-small-right uk-icon" uk-icon="icon: cart;">
+          </span> Carro ({{ app.session.get('ProductIDs')|length }})</a></div>
+        </div>
+  </div>
+
+    </nav>
+  </div>
+
+    </div>

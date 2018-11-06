@@ -1,0 +1,76 @@
+{% extends 'frontend/base.html.twig' %}
+
+{% block body %}
+
+<div class="uk-background-cover uk-background-bottom-center uk-position-relative" data-src="{{ asset('components/header-f.svg') }}" uk-img>
+
+{% include 'frontend/components/smallnav.html.twig' %}
+
+  <div class="uk-container header-b  tm-container-medium">
+
+<div class="uk-flex uk-flex-center uk-flex-middle uk-text-center header-b">
+  <div class="uk-width-xlarge">
+    <div class="service-container light">
+      <h1 class="title uk-margin-remove">{{ service.name }}</h1>
+      <p class="content-description uk-margin-remove-top">Servicios</p>
+   </div>
+ </div>
+</div>
+
+  </div>
+
+</div>
+
+{#  <div class="uk-section uk-background-cover" {% if service.orientation == "left" %} data-src="{{ asset('components/background-service-a.svg') }}" {% else %} data-src="{{ asset('components/background-service-b.svg') }}" {% endif %} uk-img >
+
+<div class="uk-container tm-container-medium">
+  <div class="uk-child-width-1-2@m uk-grid-large uk-margin-large-top uk-text-center uk-flex uk-flex-middle uk-margin-large-top" uk-grid>
+
+   <div>
+       <img class="uk-margin-bottom" id="service-item-b" uk-img src="{{ asset('' ~ service.cover) }}" alt="">
+
+   </div>
+   <div {% if service.orientation == "left" %} class="uk-flex-first@m" {% else %} class="uk-text-center uk-text-right@m" {% endif %}>
+     <div {% if service.orientation == "left" %} class="uk-text-left@m" {% else %} class="uk-inline uk-width-large uk-text-left@m" {% endif %}>
+
+          <div class="service-container uk-inline uk-width-large">
+           <p class="subtitle uk-margin-small"> <span class="uk-icon uk-margin-small-right" uk-icon="icon: minus;"></span> Arte Impreso</p>
+            <h1 class="title-small uk-margin-remove">{{ service.name }}</h1>
+            <p class="content-description uk-margin-small">
+              {{ service.description }}
+            </p>
+
+          </div>
+
+     </div>
+   </div>
+
+</div>
+</div>
+
+</div> #}
+
+
+<div class="uk-section uk-section-large uk-background-cover " data-src="{{ asset('components/background-service-a.svg') }}" uk-img>
+
+  <div class="uk-container tm-container-medium" >
+
+   <div class="uk-child-width-1-2@s uk-flex uk-flex-middle" uk-grid>
+     <div>
+       <div class="uk-width-large">
+         <div class="blog-content uk-position-relative">{{ service.content | raw}}</div>
+       </div>
+     </div>
+
+     <div>
+       <div><img src="{{ asset('uploads/components/' ~ service.cover)}}" uk-img alt=""></div>
+     </div>
+   </div>
+
+  </div>
+
+
+</div>
+
+
+{% endblock %}

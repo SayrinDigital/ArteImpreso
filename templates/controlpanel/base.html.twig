@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    {% block stylesheets %}
+      <link href="https://fonts.googleapis.com/css?family=Raleway:200,300,400,500,700,900" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.12/css/uikit.min.css"/>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.12/js/uikit.min.js"></script>
+      <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
+            <link rel="stylesheet" href="{{ asset('assets/app.css') }}">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.11.1/ui/trumbowyg.min.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.11.1/trumbowyg.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.11.1/langs/es.min.js"></script>
+    {% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+  <body>
+    <div class="uk-section uk-section-small uk-background-cover " data-src="{{ asset('components/controlpanel-bg.svg') }}" uk-img>
+
+       <div class="uk-height-1-1">
+         <div class="uk-width-1-2@s uk-margin-medium-left">
+           <div class="service-container light">
+             <div class="title-a uk-margin-remove">Bienvenido Usuario</div>
+             <p class="content-description uk-margin-remove">Bienvenido Al Panel De Administración Sayrin De Su Sitio Web</p>
+           </div>
+         </div>
+       </div>
+
+    </div>
+
+    <div uk-grid>
+
+      <div class="uk-width-1-5@s">
+        <div class="uk-padding">
+          <div>
+            <ul class="uk-nav nav-left-panel uk-nav-default">
+           <li class="uk-active"><a href="{{ path('controlpanel-services') }}">Servicios</a></li>
+           {{ render(controller(
+                 'App\\Controller\\ControlPanelController::fillCategoriesPanel'
+             )) }}
+           <li class="uk-parent">
+                <li class="uk-parent">
+                    <a href="{{ path('controlpanel-store-notifiedsales') }}">Ventas Realizadas</a>
+                    <ul class="uk-nav-sub">
+                      <li><a href="{{ path('controlpanel-categories') }}">Administrar</a></li>
+                    </ul>
+                </li>
+           </li>
+       </ul>
+    </div>
+        </div>
+      </div>
+      <div class="uk-width-4-5@s content-panel">
+        <div class="uk-container tm-container-medium">
+          <div class="uk-padding">
+            {% block body %}
+            {% endblock %}
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    {% block javascripts %}
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.12/js/uikit-icons.min.js"></script>
+            <script>$('.editor-content').trumbowyg({
+              lang: 'es'
+            });</script>
+    {% endblock %}
+
+  </body>
+</html>

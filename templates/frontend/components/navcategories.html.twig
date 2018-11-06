@@ -1,0 +1,5 @@
+<ul class="uk-nav uk-nav-default">
+    {% for category in categories %}
+    <li class="category-item"><a href="{{ path('storebycategory', { 'page' : 1,  'categoryId' : category.id }) }}"> <span class="uk-icon uk-small-right" uk-icon="icon: grid;"></span> {{ category.name }}</a></li>
+    {% endfor %}
+</ul>

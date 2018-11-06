@@ -1,0 +1,43 @@
+
+<div class="uk-section uk-position-relative" uk-img >
+
+<div class="{% if orientation == "left" %} uk-position-center-right {% else %} uk-position-center-left {% endif %} uk-height-1-2 uk-width-3-5">
+  <img {% if orientation == "left" %} src="{{ asset('components/background-service-a.svg') }}" {% else %} src="{{ asset('components/background-service-b.svg') }}" {% endif %}  uk-img alt="">
+</div>
+
+<div class="uk-container uk-position-relative tm-container-medium">
+
+  <div class="uk-child-width-1-2@m uk-grid-large uk-margin-large-top uk-text-center uk-flex uk-flex-middle uk-margin-large-top "  uk-grid>
+
+   <div >
+     <div class="">
+              <img uk-img src="{{ asset('uploads/components/' ~ service.cover ) }}" alt="">
+     </div>
+   </div>
+   <div {% if orientation == "left" %} class="uk-flex-first@m" {% else %} class="uk-text-center uk-text-right@m" {% endif %}>
+     <div {% if orientation == "left" %} class="uk-text-left@m" {% else %} class="uk-inline uk-width-large uk-text-left@m" {% endif %}>
+
+          <div class="service-container uk-position-relative uk-inline uk-width-large uk-text-center" uk-scrollspy="cls: uk-animation-slide-bottom; target: .anim; delay: 200;">
+
+           <p class="subtitle anim title uk-margin-remove"> 0{{ position + 1 }}</p>
+            <h1 class="title-b anim uk-margin">{{ service.name }}</h1>
+            <p class="content-description anim uk-margin-remove">
+              {{ service.description }}
+            </p>
+
+            <div class="uk-margin anim">
+              <a class="link-c uk-button" href="{{ path('services',{ 'serviceId' : service.id }) }}">Leer más</a>
+            </div>
+
+
+
+          </div>
+
+     </div>
+   </div>
+
+</div>
+
+</div>
+
+</div>

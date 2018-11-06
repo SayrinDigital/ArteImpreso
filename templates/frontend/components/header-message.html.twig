@@ -1,0 +1,21 @@
+<div class="uk-background-cover uk-position-relative" data-src="{{ asset('components/header-c.svg') }}" uk-img>
+
+  {% include 'frontend/components/navigator.html.twig' %}
+
+  <div class="uk-container header-a  tm-container-medium">
+
+<div class="uk-flex uk-flex-center uk-flex-middle uk-text-center header-a">
+  <div class="uk-width-xlarge">
+    <div class="service-container">
+      <h1 class="title uk-margin-remove">{{ title }}</h1>
+      <p class="content-description uk-margin-medium">
+        {{ description }}
+      </p>
+      <p class="link-gradient-b"><a href="{{ path('{{ redirectPath }}') }}" uk-scroll>{{ linktext }}</a></p>
+   </div>
+ </div>
+</div>
+
+  </div>
+
+</div>

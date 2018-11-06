@@ -1,0 +1,70 @@
+
+
+<div id="service-container-{{ service.id }}">
+
+  <div class="box-shadow-bottom uk-border-rounded uk-overflow-hidden uk-box-shadow-small uk-box-shadow-hover-large">
+
+    <div class="top uk-padding-small">
+       <img src="{{ asset('uploads/components/' ~ service.cover ) }}" uk-img alt="">
+    </div>
+
+    <div class="uk-padding content">
+
+      <h4>{{ service.name }}</h4>
+      <p class="content-description">{{ service.description }}</p>
+
+      <div class="uk-text-center">
+
+        <a uk-toggle href="#editservice-modal-{{ service.id }}" class="link-d open-editservicemodal uk-margin-small-right"> <span class="uk-icon" uk-tooltip="Editar" uk-icon="icon: pencil;"></span> </a>
+          <a data-serviceid="{{ service.id }}" class="remove-service-button link-c uk-button"> <span class="uk-icon" uk-tooltip="Eliminar" uk-icon="icon: trash;"></span> </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+</div>
+
+<div id="editservice-modal-{{ service.id }}" uk-modal>
+    <div class="uk-modal-dialog">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <div class="uk-modal-header">
+            <h2 class="uk-modal-title">Modificar Servicio</h2>
+        </div>
+        <div class="uk-modal-body">
+          <form id="editservice-form-{{ service.id }}">
+              <fieldset class="uk-fieldset">
+
+                  <div class="uk-margin">
+                      <input id="service_name" class="uk-input" type="text" value="{{ service.name }}" placeholder="Nombre" required>
+                  </div>
+
+                  <div class="uk-margin">
+                      <textarea id="service_description" class="uk-textarea" rows="2" type="text" placeholder="Descripción" required>{{ service.description }}</textarea>
+                  </div>
+
+                  <div class="uk-margin">
+                      <textarea id="service_content" class="editor-content uk-textarea" rows="3"  placeholder="Contenido" required>
+                        {{ service.content }}
+                      </textarea>
+                  </div>
+
+                  <div class="uk-margin" uk-margin>
+            <div uk-form-custom="target: true" class="uk-width-1-1">
+                <input id="service_cover" type="file" required>
+                <input class="uk-input " type="text" placeholder="Seleccionar Imagen Representativa" disabled>
+            </div>
+        </div>
+
+              </fieldset>
+          </form>
+                </div>
+        <div class="uk-modal-footer uk-text-right">
+            <button class="uk-modal-close link-d" type="button">Cancelar</button>
+            <button class="link-c edit-service-button uk-button" data-serviceid="{{ service.id }}" type="button">Guardar</button>
+            <div class="uk-hidden editservice-spinner uk-margin-small-left" uk-spinner></div>
+        </div>
+    </div>
+</div>
