@@ -1,0 +1,36 @@
+{% extends 'frontend/base.html.twig' %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+
+<div class="uk-section">
+
+  <div class="uk-section">
+    <div class="uk-container tm-container-medium">
+
+      <div class="uk-margin-auto uk-card uk-border-rounded uk-card-default uk-card-body uk-width-1-2@m">
+          <div class="uk-card-badge uk-label uk-text-capitalize">{{ order.status }}</div>
+          <h3 class="uk-margin-remove">Orden N°{{ order.orderid }}</h3>
+  <h3 class="uk-margin-remove pink-accent">Total: ${{ order.total|number_format(0) }} CLP</h3>
+  <hr class="uk-hr">
+  <div class="uk-list">
+    {% for item in resume %}
+    <li>
+      <div>
+        <h4 class="uk-margin-remove">{{ loop.index }} - {{ item.name }} - <span class="pink-accent">${{ item.price|number_format(0) }} CLP</span></h4>
+        <p class="uk-margin-remove">{{ item.units }} unidad{% if item.units > 1 %}es{% endif %}</p>
+      </div>
+    </li>
+    {% endfor %}
+  </div>
+  <hr class="uk-hr">
+  <h3 class="uk-margin-remove">Cliente: {{ order.clientname }}</h3>
+  <h4 class="uk-margin-remove pink-accent">Email {{ order.clientmail }} </h4>
+  <h4 class="uk-margin-remove">Teléfono {{ order.clientphone }} </h4>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

@@ -2,7 +2,7 @@
 
 <div id="service-container-{{ service.id }}">
 
-  <div class="box-shadow-bottom uk-border-rounded uk-overflow-hidden uk-box-shadow-small uk-box-shadow-hover-large">
+  <div class="uk-background-default box-shadow-bottom uk-border-rounded uk-overflow-hidden uk-box-shadow-small uk-box-shadow-hover-large">
 
     <div class="top uk-padding-small">
        <img src="{{ asset('uploads/components/' ~ service.cover ) }}" uk-img alt="">
@@ -15,7 +15,7 @@
 
       <div class="uk-text-center">
 
-        <a uk-toggle href="#editservice-modal-{{ service.id }}" class="link-d open-editservicemodal uk-margin-small-right"> <span class="uk-icon" uk-tooltip="Editar" uk-icon="icon: pencil;"></span> </a>
+        <a uk-toggle href="#editservice-modal-{{ service.id }}" class="link-d open-editservicemodal uk-button uk-margin-small-right"> <span class="uk-icon" uk-tooltip="Editar" uk-icon="icon: pencil;"></span> </a>
           <a data-serviceid="{{ service.id }}" class="remove-service-button link-c uk-button"> <span class="uk-icon" uk-tooltip="Eliminar" uk-icon="icon: trash;"></span> </a>
 
       </div>

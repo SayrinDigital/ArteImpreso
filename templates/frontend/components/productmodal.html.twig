@@ -1,14 +1,14 @@
 {% extends 'frontend/base.html.twig' %}
-
+{% block title %}{{ title }}{% endblock %}
 {% block body %}
 
 <div class="uk-grid-collapse uk-child-width-1-2@s uk-flex-middle" uk-grid>
 					 <div class="uk-background-cover" data-src="{{ asset('uploads/productcovers/' ~ product.cover) }}" uk-img uk-height-viewport></div>
 					 <div class="uk-padding-large service-container uk-text-center">
 
-							 <div uk-scrollspy="cls: uk-animation-slide-bottom; target: .anim; delay: 200;">
-								 <p class="subtitle title uk-margin-remove anim">{{ product.category.name }}</p>
-								<h1 class="title-b uk-margin anim">{{ product.name }}</h1>
+							 <div>
+								 <p class="subtitle title uk-margin-remove title-anim" data-in-effect="bounceIn">{{ product.category.name }}</p>
+								<h1 class="title-b uk-margin title-anim" data-in-effect="bounceIn">{{ product.name }}</h1>
 								<p class="content-description uk-margin-remove anim">
 									{{ product.description }}
 								</p>
@@ -44,9 +44,9 @@
 			 UIkit.modal.confirm('Producto agregado. ¿Ir al carro de compras?', {labels: {'ok': 'Si', 'cancel': 'Volver'}}).then(function () {
                window.location.href = "{{ path('store-cart') }}";
            }, function () {
-               console.log('Welcome back')
+               window.location.href = "{{ path('store') }}";
            });
-	 console.log(data.id);
+
 		 }
 		});
 		return false;

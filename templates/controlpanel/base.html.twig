@@ -12,10 +12,12 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.11.1/ui/trumbowyg.min.css">
       <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.11.1/trumbowyg.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.11.1/langs/es.min.js"></script>
+      <link rel="shortcut icon" href="{{ asset('/components/favicon.png') }}">
     {% endblock %}
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %} | Panel | ArteImpreso</title>
   </head>
   <body>
+
     <div class="uk-section uk-section-small uk-background-cover " data-src="{{ asset('components/controlpanel-bg.svg') }}" uk-img>
 
        <div class="uk-height-1-1">
@@ -41,9 +43,12 @@
              )) }}
            <li class="uk-parent">
                 <li class="uk-parent">
-                    <a href="{{ path('controlpanel-store-notifiedsales') }}">Ventas Realizadas</a>
+                    <a href="{{ path('controlpanel-store-saleorders') }}">Órdenes de Compra</a>
                     <ul class="uk-nav-sub">
-                      <li><a href="{{ path('controlpanel-categories') }}">Administrar</a></li>
+                      <li><a href="{{ path('controlpanel-store-saleordersbycategory',{ 'id' : 2 }) }}">Pagado</a></li>
+                      <li><a href="{{ path('controlpanel-store-saleordersbycategory',{ 'id' : 1 }) }}">Pendiente de Pago</a></li>
+                      <li><a href="{{ path('controlpanel-store-saleordersbycategory',{ 'id' : 3 }) }}">Anulado</a></li>
+                      <li><a href="{{ path('controlpanel-store-saleordersbycategory',{ 'id' : 0 }) }}">Orden Generada</a></li>
                     </ul>
                 </li>
            </li>
@@ -65,8 +70,11 @@
 
     {% block javascripts %}
       <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.12/js/uikit-icons.min.js"></script>
-            <script>$('.editor-content').trumbowyg({
-              lang: 'es'
+            <script>
+
+            $('.editor-content').trumbowyg({
+              lang: 'es',
+              svgPath: '{{ asset('components/' ~ 'icons.svg') }}'
             });</script>
     {% endblock %}
 

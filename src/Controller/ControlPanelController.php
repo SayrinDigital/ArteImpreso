@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\Service;
+use App\Entity\Sale;
 
 class ControlPanelController extends AbstractController
 {
@@ -32,7 +33,7 @@ class ControlPanelController extends AbstractController
       ->findAll();
 
         return $this->render('controlpanel/services/index.html.twig', [
-            'headertitle' => 'Servicios - Sayrin Panel',
+            'headertitle' => 'Servicios',
             'services' => $services
         ]);
     }
@@ -42,7 +43,7 @@ class ControlPanelController extends AbstractController
      */
     public function storePanel(){
       return $this->render('controlpanel/store/main.html.twig', [
-        'headertitle' => 'Tienda - Sayrin Panel',
+        'headertitle' => 'Tienda',
       ]);
     }
 
@@ -57,7 +58,7 @@ class ControlPanelController extends AbstractController
              ->findAll();
 
         return $this->render('controlpanel/store/categories.html.twig', [
-          'headertitle' => 'Categorías - Sayrin Panel',
+          'headertitle' => 'Categorías',
             'categories' => $categories
         ]);
     }
@@ -75,19 +76,64 @@ class ControlPanelController extends AbstractController
            $categoryName = ucfirst($category->getName());
 
         return $this->render('controlpanel/store/index.html.twig', [
-          'headertitle' => $categoryName . ' - Sayrin Panel',
+          'headertitle' => $categoryName,
             'category' => $category
         ]);
     }
 
     /**
-     * @Route("panel/tienda/ventasnotificadas", name="controlpanel-store-notifiedsales")
+     * @Route("panel/tienda/ordenesdeventa", name="controlpanel-store-saleorders")
      */
-    public function notifiedSalesPanel(){
-      return $this->render('controlpanel/store/notifiedsales.html.twig', [
-        'headertitle' => 'Ventas Notificadas - Tienda - Sayrin Panel',
+    public function saleOrdersPanel(){
+
+      $orders = $this->getDoctrine()
+      ->getRepository(Sale::class)
+      ->findAll();
+
+      return $this->render('controlpanel/store/saleorders.html.twig', [
+        'headertitle' => 'Órdenes de Venta',
+        'orders' => $orders
       ]);
     }
+
+    /**
+     * @Route("panel/tienda/ordenesdeventa/{id}", name="controlpanel-store-saleordersbycategory")
+     */
+     public function saleOrdersPanelbyCategory($id){
+
+       switch($id){
+         case 1:
+         $orders = $this->getDoctrine()
+         ->getRepository(Sale::class)
+         ->findBy(['status' => 'Pendiente de Pago']);
+         break;
+         case 2:
+         $orders = $this->getDoctrine()
+         ->getRepository(Sale::class)
+         ->findBy(['status' => 'Pagado']);
+         break;
+         case 3:
+         $orders = $this->getDoctrine()
+         ->getRepository(Sale::class)
+         ->findBy(['status' => 'Rechazado']);
+         break;
+         case 4:
+         $orders = $this->getDoctrine()
+         ->getRepository(Sale::class)
+         ->findBy(['status' => 'Anulado']);
+         break;
+         default:
+         $orders = $this->getDoctrine()
+         ->getRepository(Sale::class)
+         ->findBy(['status' => 'Orden Generada']);
+       }
+
+       return $this->render('controlpanel/store/saleorders.html.twig', [
+         'headertitle' => 'Órdenes de Venta',
+         'orders' => $orders
+       ]);
+
+     }
 
     public function fillCategoriesPanel(){
 

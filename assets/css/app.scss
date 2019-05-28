@@ -1,5 +1,6 @@
 html, body{
 	background-color: rgb(236, 240, 241);
+	overflow-x: hidden;
 }
 
 $colors: (
@@ -147,13 +148,37 @@ $light-pink-accent: rgba(235, 84, 185, 0.5);
     max-width: 1360px;
 }
 
+.uk-card-badge{
+	border-radius: 5px;
+	@extend %secondary-font;
+}
+
+.uk-offcanvas-bar{
+	background: #fff;
+	@extend %secondary-font;
+	.uk-nav-primary>li>a{
+		color: #584B66;
+		&:hover{
+			color: #333;
+		}
+	}
+}
+
+.pink-accent{
+	color: $pink-accent;
+}
+
 h1,h2,h3,h4,h5,h6{
 	@extend %primary-font;
 	color: #4A4E63;
 }
 
-.uk-navbar-nav>li>a{
+.uk-navbar-nav>li>a, .uk-navbar-dropdown-nav>li>a{
 	@extend %secondary-font;
+}
+
+.uk-navbar-dropdown{
+	border-radius: 5px;
 }
 
 .title{
@@ -304,8 +329,8 @@ a.link-simple{
 
 }
 
-.image-shadow{
-
+.uk-sendtofront{
+	z-index: 1;
 }
 
 .service-container{
@@ -451,9 +476,33 @@ border-radius: 50%;
 
 }
 
+.badge{
+	border-radius: 5px;
+	box-sizing: border-box;
+	padding: 0 5px;
+	background: #1e87f0;
+	color: #fff;
+	font-size: 13px;
+	&.green{
+		background: #95d047;
+	}
+	&.red{
+		background: rgb(217, 61, 131);
+	}
+	&.orange{
+		background: $orange-accent;
+	}
+
+}
+
 .uk-input, .uk-textarea, select{
-	font-size: 14px;
+	font-size: 15px;
 	border-radius: 10px;
+	text-transform: capitalize;
+	@extend %secondary-font;
+	&:focus{
+		border: 1px solid $pink-accent;
+	}
 }
 
 .uk-overlay-gradient{
@@ -484,7 +533,6 @@ border-radius: 50%;
 	a{
 		text-transform: capitalize;
 		@extend %secondary-font;
-		font-weight: 500;
 	}
 }
 

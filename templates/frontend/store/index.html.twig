@@ -1,11 +1,10 @@
 {% extends 'frontend/base.html.twig' %}
 {% set currentPath = app.request.attributes.get('_route') %}
-
+{% block title %}{{ title }}{% endblock %}
 {% block body %}
 
 
 <div class="uk-background-cover uk-position-relative" data-src="{{ asset('components/header-b.svg') }}" uk-img>
-     {% include 'frontend/components/smallnav.html.twig' %}
 <div class="uk-section uk-section-small"></div>
 <div class="uk-section">
   <div class="uk-container  tm-container-medium">
@@ -13,7 +12,7 @@
 <div class="uk-text-center">
   <div class="uk-width-xlarge@s uk-margin-auto uk-width-1-1">
     <div class="service-container">
-      <h1 class="title uk-margin-remove">Tenemos productos que se ajustan a ti</h1>
+      <h1 class="title uk-margin-remove title-anim" data-in-effect="bounceIn">Tenemos productos que se ajustan a ti</h1>
       <p class="content-description uk-margin-medium">
         En nuestra tienda encontrará mucha variedad de productos diseñados específicamente para usted y sus necesidades, con la mejor calidad, tiempo de producción y costo.
       </p>
@@ -48,6 +47,21 @@
 </div>
 
 </div>#}
+
+<div class="uk-section uk-section-large uk-background-cover" {% if title == "Tienda" %} data-src="{{ asset('components/cover-a.png') }}" {% else %} data-src="{{ asset('/uploads/components/' ~ category.cover ) }}"  {% endif %} uk-img>
+  <div class="uk-container tm-container-medium">
+    <div class="service-container uk-width-1-2@s uk-text-center">
+      <p class="subtitle anim title uk-margin-remove"> 01</p>
+       <h1 class="title-b anim uk-margin">Productos Nuevos</h1>
+       <p class="content-description anim uk-width-large@s uk-width-1-1 uk-margin-remove uk-margin-auto">
+         Entregamos productos con la mejor calidad que cumplan con las necesidades para su negocio.
+       </p>
+       <div class="uk-margin anim">
+         <a class="link-c uk-button" href="{{ path('contact') }}">Cotizar productos</a>
+       </div>
+    </div>
+  </div>
+</div>
 
 <div class="uk-section" >
 

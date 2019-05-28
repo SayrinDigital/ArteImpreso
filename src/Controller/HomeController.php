@@ -22,11 +22,12 @@ class HomeController extends AbstractController
 
       $products = $this->getDoctrine()
         ->getRepository(Product::class)
-        ->findLatestProducts(10);
+        ->findLatestProducts(6);
 
         return $this->render('frontend/home/index.html.twig', [
           'products' => $products,
-          'services' => $services
+          'services' => $services,
+          'title' => 'Inicio'
         ]);
     }
 }

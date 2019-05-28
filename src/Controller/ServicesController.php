@@ -18,7 +18,8 @@ class ServicesController extends AbstractController
         $service = $this->getDoctrine()->getRepository(Service::class)->findOneById($serviceId);
 
         return $this->render('frontend/services/index.html.twig', [
-            'service' => $service
+            'service' => $service,
+            'title'  => $service->getName()
         ]);
     }
 

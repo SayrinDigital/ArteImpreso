@@ -9,19 +9,25 @@
         </div>
 
         <div class="uk-card-body uk-background-cover" data-src="{{ asset('components/product-bg.svg') }}" uk-img>
-                      <h3 class="uk-card-title uk-margin-remove">{{ product.name|capitalize }}</h3>
+
+          <h3 class="product-title uk-card-title uk-margin-remove"><span class="pink-accent">- </span>{{ product.name|capitalize }}</h3>
             <p class="category  uk-margin-remove-top uk-margin-medium-top">{{ product.category.name }}</p>
+           <p>{{ product.description }}</p>
+            <h2 >$ <span id="price_value-{{ product.id }}"> {{ product.price|number_format(0) }}</span> CLP</h2>
 
-                            <div class="uk-text-center">
+                    {#  <h3 class="uk-card-title uk-margin-remove">{{ product.name|capitalize }}</h3>
+            <p class="category  uk-margin-remove-top uk-margin-medium-top">{{ product.category.name }}</p>#}
 
-                              <a href="#product-modal-edit-{{ product.id }}" uk-toggle class="link-d uk-margin-small-right"> <span class="uk-icon" uk-tooltip="Editar" uk-icon="icon: pencil;"></span> </a>
-                                <a class="delete-product-button link-c" data-productid="{{ product.id }}"> <span class="uk-icon" uk-tooltip="Eliminar" uk-icon="icon: trash;"></span> </a>
-
-                            </div>
         </div>
 
         <div class="uk-card-footer">
-          <p class="price"><span class=" uk-icon uk-margin-small-right" uk-icon="icon: cart;"></span> $<span class="price-text"> {{ product.price|number_format(0) }} </span></p>
+
+                                      <div class="uk-text-center">
+
+                                        <a href="#product-modal-edit-{{ product.id }}" uk-toggle class="link-d uk-button uk-margin-small-right"> <span class="uk-icon" uk-tooltip="Editar" uk-icon="icon: pencil;"></span> </a>
+                                          <a class="delete-product-button link-c uk-button" data-productid="{{ product.id }}"> <span class="uk-icon" uk-tooltip="Eliminar" uk-icon="icon: trash;"></span> </a>
+
+                                      </div>
         </div>
 
 

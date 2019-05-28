@@ -2,6 +2,7 @@
 <html class="no-js">
   <head>
     <meta charset="UTF-8">
+     <title>{% block title %}{% endblock %} | Arte Impreso</title>
     {% block stylesheets %}
       <link href="https://fonts.googleapis.com/css?family=Krub:300,400,500,600,700|Muli:300,400,700" rel="stylesheet">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.12/css/uikit.min.css"/>
@@ -9,17 +10,36 @@
       <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,900" rel="stylesheet">
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
       <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+      <link rel="shortcut icon" href="{{ asset('components/favicon.png') }}">
+      <meta name="theme-color" content="#EA52B6">
+      <meta name="viewport" content="width=device-width">
     {% endblock %}
   </head>
   <body>
 
     <div id="main-body">
-      {% include 'frontend/components/smallnav.html.twig' %}
+      {% set currentPath = app.request.get('_route') %}
+
+      {{ render(controller(
+            'App\\Controller\\ComponentsController::fillNavigator',{ 'route' : currentPath }
+        )) }}
            {% block body %}{% endblock %}
            {{ render(controller(
                  'App\\Controller\\ComponentsController::fillFooter'
              )) }}
     </div>
+    <div id="offcanvas-nav-primary" uk-offcanvas="overlay: true">
+    <div class="uk-offcanvas-bar uk-flex uk-flex-column">
+
+        <ul class="uk-nav uk-nav-primary uk-nav-center uk-margin-auto-vertical">
+            <li><a href="{{ path('home') }}">Portada</a></li>
+            <li><a href="{{ path('store') }}">Tienda</a></li>
+            <li><a href="{{ path('store-cart') }}">Carro</a></li>
+            <li><a href="{{ path('contact') }}">Contacto</a></li>
+        </ul>
+
+    </div>
+</div>
 
 
 <div class="loader">
@@ -32,6 +52,9 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.12/js/uikit.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.12/js/uikit-icons.min.js"></script>
       <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/lettering.js/0.7.0/jquery.lettering.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/textillate/0.4.0/jquery.textillate.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
       <script src="{{ asset('assets/app.js') }}"></script>
       <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
       <script>
@@ -48,6 +71,12 @@
 
 
       </script>
+      <script type="text/javascript">
+var $zoho=$zoho || {};$zoho.salesiq = $zoho.salesiq ||
+{widgetcode:"e11a272374d626fd175fd9adac787b2a32d48fb53550d4847fd583d66c510bbf5d5fe629768af6d9a03793700d9418c2", values:{},ready:function(){}};
+var d=document;s=d.createElement("script");s.type="text/javascript";s.id="zsiqscript";s.defer=true;
+s.src="https://salesiq.zoho.com/widget";t=d.getElementsByTagName("script")[0];t.parentNode.insertBefore(s,t);d.write("<div id='zsiqwidget'></div>");
+</script>
 
     {% endblock %}
   </body>

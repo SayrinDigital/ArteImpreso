@@ -4,24 +4,26 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Category;
 use App\Entity\Service;
 
 class ComponentsController extends AbstractController
 {
 
-    public function fillNavigator()
+    public function fillNavigator(Request $request, $route)
     {
 
-      $categories = $this->getDoctrine()
+       $categories = $this->getDoctrine()
              ->getRepository(Category::class)
              ->findAll();
 
-      $services = $this->getDoctrine()->getRepository(Service::class)->findAll();
+       $services = $this->getDoctrine()->getRepository(Service::class)->findAll();
 
-        return $this->render('frontend/components/stacknavigator.html.twig', [
+        return $this->render('frontend/components/smallnav.html.twig', [
             'categories' => $categories,
-            'services' => $services
+            'services' => $services,
+            'currentPath' => $route
         ]);
     }
 

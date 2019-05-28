@@ -4,18 +4,42 @@
 
 <div>
 
-        <div class="title-a uk-margin-remove">{{ category.name }}</div>
-        <p class="content-description uk-margin-remove-top">Lleva el control total de tus productos seccionados por la categoría específica</p>
-        <a href="#addproduct-modal" uk-toggle class="link-d uk-margin-small-right"> <span class="uk-icon uk-margin-small-right" uk-tooltip="Nuevo" uk-icon="icon: plus;"></span> Nuevo Producto</a>
+<div class="uk-section">
+  <h1 class="title uk-margin-remove">{{ category.name }}</h1>
+  <p class="content-description uk-margin-remove-top">Lleva el control total de tus productos seccionados por la categoría específica</p>
+  <a href="#addproduct-modal" uk-toggle class="link-d uk-margin-small-right uk-button"> <span class="uk-icon uk-margin-small-right" uk-tooltip="Nuevo" uk-icon="icon: plus;"></span> Nuevo Producto</a>
+</div>
+
+<div class="uk-section uk-section-small">
+
+  <h1 class="title uk-margin-remove">Cover</h1>
+
+  <div class="uk-margin">
+<div uk-form-custom>
+<input type="file" class="upload-file-cover" data-categoryid="{{ category.id }}">
+<button class="link-c uk-button"> <div uk-spinner class="spin uk-hidden"></div> <span class="uk-icon uk-margin-small-right" uk-icon="icon: refresh;"></span> Cambiar</button>
+</div>
+</div>
+
+<div class="uk-section">
+              <img id="cover-category" src="{{ asset('uploads/components/' ~ category.cover) }}" uk-img alt="">
+          </div>
+</div>
+
+</div>
 
   <div class="uk-section uk-section-small">
 
-    <div class="uk-child-width-1-3@s uk-grid-match" id="products-container" uk-grid>
-      {% for product in category.products %}
-      {{ include ('controlpanel/components/product.html.twig', { 'product' : product  }) }}
-      {% endfor %}
-    </div>
+    <h1 class="title uk-margin-remove">Productos</h1>
 
+    <div class="uk-section">
+      <div class="uk-child-width-1-2@s uk-grid-match" id="products-container" uk-grid>
+        {% for product in category.products %}
+        {{ include ('controlpanel/components/product.html.twig', { 'product' : product  }) }}
+        {% endfor %}
+      </div>
+
+    </div>
   </div>
 
   </div>
@@ -86,6 +110,56 @@ var slideUp = {
 
 ScrollReveal().reveal('.reveal-animation-a', slideUp);
 
+$('.upload-file-cover').change(function(){
+
+   var categoryid = $(this).data('categoryid');
+
+   var fileData = $(this).get(0).files[0];
+
+   var data = new FormData();
+   data.append('id', categoryid);
+   data.append('cover', fileData, fileData.name);
+
+   $('.spin').removeClass('uk-hidden');
+
+   $.ajax({
+             type: 'post',
+             url: '{{ path('request-modifycategorycover') }}',
+             data: data,
+            processData: false,
+            async: true,
+            contentType: false,
+            cache: false,
+             success: function(data) {
+
+            $('#cover-category').attr('src', "{{ asset('uploads/components/') }}"+ data.path);
+
+                $('.spin').addClass('uk-hidden');
+
+               UIkit.notification({
+                 message: 'Se actualizó el cover correctamente',
+                 status: 'primary',
+                 pos: 'bottom-right',
+                 timeout: 2000
+              });
+
+            },
+            error: function(data){
+            $('.spin').addClass('uk-hidden');
+
+              UIkit.notification({
+                message: 'Hubo un error inesperado',
+                status: 'danger',
+                pos: 'bottom-right',
+                timeout: 2000
+             });
+            }
+           });
+
+  console.log('pressed');
+
+});
+
 $('#save-newproduct').click(function(){
 
   var productName = $('#productname').val();
@@ -138,18 +212,6 @@ $('#save-newproduct').click(function(){
 
                 }
               });
-
-    /*}
-    else{
-
-    UIkit.notification({
-      message: 'Necesitas subir 2 imágenes!',
-      status: 'danger',
-      pos: 'bottom-right',
-      timeout: 1000
-   });
-
- }*/
  }
  else{
 

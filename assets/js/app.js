@@ -13,7 +13,9 @@ $(document).ready(function(){
   $('#main-body').imagesLoaded( function() {
     $('.loader').fadeOut(300, function() { $(this).remove(); });
     $('#main-body').addClass('visible');
-    console.log('is it working?');
+    $(function () {
+	$('.title-anim').textillate();
+})
   });
 
 });

@@ -1,0 +1,48 @@
+{% extends 'controlpanel/base.html.twig' %}
+{% block title %}{{ headertitle }}{% endblock %}
+{% block body %}
+
+<div>
+
+        <div class="title-a uk-margin-remove">Órdenes de Compra</div>
+        <p class="content-description uk-margin-remove-top">Administre las ventas realizadas.</p>
+
+    <div class="uk-section uk-section-small uk-overflow-auto">
+      <table class="uk-table uk-table-divider uk-table-middle uk-text-center uk-table-hover">
+          <thead>
+              <tr>
+                  <th class="uk-width-small">ID De Venta</th>
+                  <th>Hora y Fecha</th>
+                  <th class="uk-table-expand">Estado</th>
+                  <th>Total</th>
+                  <th>Nombre del Cliente</th>
+                  <th>Teléfono</th>
+                  <th>Email</th>
+                  <th>Resumen de Venta</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for order in orders|reverse %}
+              <tr>
+                  <td><p class="" uk-tooltip="N° {{ order.orderid }}">{{ order.orderid[:10] }}</p></td>
+                  <td><p>{{ order.date|date('Y-m-d H:i') }}</p></td>
+                  <td><p><span class="badge
+                {% if order.status == "Pagado" %} green
+                {% elseif order.status == "Rechazado" %} red
+                {% elseif order.status == "Anulado" %} red
+                {% elseif order.status == "Pendiente de Pago" %} orange {% endif %}
+                ">{{ order.status }}</span></p></td>
+                  <td><p>${{ order.total|number_format(0) }} CLP</p></td>
+                  <td><p>{{ order.clientname }}</p></td>
+                  <td><p>{{ order.clientphone }}</p></td>
+                  <td><p>{{ order.clientmail }}</p></td>
+                  <td><a href="{{ path('store-order', { 'id' : order.orderid } ) }}">Ver Resumen</a></td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+    </div>
+
+  </div>
+
+{% endblock %}

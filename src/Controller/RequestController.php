@@ -12,6 +12,9 @@ use App\Service\FileUploader;
 use App\Entity\Service;
 use App\Entity\Category;
 use App\Entity\Product;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 
 class RequestController extends AbstractController
@@ -51,7 +54,6 @@ class RequestController extends AbstractController
                       'desc' => $servicedescription,
                       'cover' => $servicecoverfileName
                     ));
-
     }
 
     }
@@ -130,6 +132,7 @@ class RequestController extends AbstractController
        if($categoryName = $request->request->get('categoryName')){
            $category = new Category();
            $category->setName($categoryName);
+           $category->setCover("");
 
            $entityManager = $this->getDoctrine()->getManager();
            $entityManager->persist($category);
@@ -187,7 +190,6 @@ class RequestController extends AbstractController
                        'name' => $categoryName
                      ));
           }
-
         }
 
         /**
@@ -337,5 +339,43 @@ class RequestController extends AbstractController
 
           }
 
+          /**
+           * @Route("/request/modifycategorycover", name="request-modifycategorycover")
+           */
+           public function modifyCategoryCover(Request $request){
+
+             $fileSystem = new Filesystem();
+
+                  if($productcoverfile = $request->files->get('cover')){
+
+                    $id = $request->get('id');
+
+                    $productcoverfileName = md5(uniqid()).'.'.$productcoverfile->guessExtension();
+                    $productcoverfile->move(
+                           $this->getParameter('components_directory'),
+                           $productcoverfileName
+                       );
+
+                       $entityManager = $this->getDoctrine()->getManager();
+                       $category = $entityManager->getRepository(Category::class)->findOneById($id);
+
+                       $oldName = $category->getCover();
+                       $fullPath = $this->getParameter('components_directory').$oldName ;
+                       if($oldName!=""){
+                         $fileSystem->remove($fullPath);
+                       }
+
+                       $category->setCover($productcoverfileName);
+                       $entityManager->flush();
+
+
+                       return new JsonResponse(array(
+                                  'path' => $productcoverfileName,
+                                ));
+
+
+                  }
+
+           }
 
 }

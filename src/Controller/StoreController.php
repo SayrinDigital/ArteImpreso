@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use App\Entity\Category;
 use App\Entity\Product;
+use App\Entity\Sale;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class StoreController extends AbstractController
 {
@@ -35,7 +37,8 @@ class StoreController extends AbstractController
         'products' => $pagination_products,
         'pagesQuantity' => $pagesQuantity,
         'currentPage' => $page,
-        'route' => 'store'
+        'route' => 'store',
+        'title' => 'Tienda'
       ]);
   }
 
@@ -63,7 +66,8 @@ class StoreController extends AbstractController
           'pagesQuantity' => $pagesQuantity,
           'currentPage' => $page,
           'route' => 'storebycategory',
-          'category' => $category
+          'category' => $category,
+          'title' => $category->getName()
         ]);
     }
 
@@ -77,7 +81,8 @@ class StoreController extends AbstractController
         ->find($productId);
 
       return $this->render('frontend/components/productmodal.html.twig', [
-          'product' => $product
+          'product' => $product,
+          'title' => $product->getName()
       ]);
     }
 
@@ -108,6 +113,23 @@ class StoreController extends AbstractController
     }
 
     /**
+     * @Route("/tienda/remove/{productid}", name="store-cart-remove-product")
+     */
+     public function removeproductfromCarte(Request $request, $productid){
+
+       $sessionCart = $request->getSession();
+       $arrayOfProduct = $sessionCart->get('ProductIDs');
+
+       foreach (array_keys($arrayOfProduct, $productid) as $key) {
+          unset($arrayOfProduct[$key]);
+      }
+
+     $sessionCart->set('ProductIDs', $arrayOfProduct);
+     return $this->redirectToRoute('store-cart');
+
+     }
+
+    /**
      * @Route("/tienda/carro", name="store-cart")
      */
     public function cart(Request $request){
@@ -115,6 +137,14 @@ class StoreController extends AbstractController
      $sessionCart = $request->getSession();
      $arrayOfProduct = $sessionCart->get('ProductIDs');
      $repository = $this->getDoctrine()->getRepository(Product::class);
+
+      if($sessionCart->get('buyid')==""){
+      $sessionCart->set('buyid', hexdec(uniqid()));
+      }
+
+      $currentbuyid =  $sessionCart->get('buyid');
+
+
 
      $productsinCart = $repository->findById($arrayOfProduct);
 
@@ -126,7 +156,8 @@ class StoreController extends AbstractController
 
       return $this->render('frontend/store/cart.html.twig', [
         'products' => $productsinCart,
-        'totalprice' => $totalsumcart
+        'totalprice' => $totalsumcart,
+        'title' => 'Carro'
 
       ]);
     }
@@ -140,6 +171,7 @@ class StoreController extends AbstractController
     $arrayOfProduct = $sessionCart->get('ProductIDs');
     $arrayOfProduct = array();
     $sessionCart->set('ProductIDs', $arrayOfProduct);
+    $sessionCart->set('buyid', "");
 
         return $this->redirectToRoute('home');
      }
@@ -151,12 +183,57 @@ class StoreController extends AbstractController
 
         if($total = $request->get('total')){
 
+          $sessionCart = $request->getSession();
+          $orderresume = json_encode($request->get('orderjson'), true);
+          $currentbuyid =  $sessionCart->get('buyid');
+          $name = $request->get('cname');
+          $mail = $request->get('cmail');
+          $phone = $request->get('cphone');
+
+
+          /*foreach($orderresume as $item) { //foreach element in $arr
+            //  $uses = $item['name']; //etc
+          }*/
+
                $sessionCart = $request->getSession();
                $sessionCart->set('TotalToPay', $total);
 
+               $order = $this->getDoctrine()
+               ->getRepository(Sale::class)
+               ->findOneBy(['orderid'=> $currentbuyid]);
+
+               date_default_timezone_set('America/Santiago');
+               $date = new \DateTime('now');
+
+               if(!$order){
+                 $order = new Sale();
+                 $order->setOrderid($currentbuyid);
+                 $order->setResume($orderresume);
+                 $order->setTotal($total);
+                 $order->setStatus("Orden Generada");
+                 $order->setClientname($name);
+                 $order->setClientmail($mail);
+                 $order->setClientphone($phone);
+                 $order->setDate($date);
+               }else{
+                 $order->setResume($orderresume);
+                 $order->setTotal($total);
+                 $order->setClientname($name);
+                 $order->setClientmail($mail);
+                 $order->setClientphone($phone);
+                 $order->setDate($date);
+               }
+
+
+                                $entityManager = $this->getDoctrine()->getManager();
+                                $entityManager->persist($order);
+                                $entityManager->flush();
+
+
 
                return new JsonResponse(array(
-                          'total' => $total,
+                          'total' => $total
+
                         ));
 
         }
@@ -174,51 +251,173 @@ class StoreController extends AbstractController
     }
 
     /**
-     * @Route("/tienda/pagar/flow", name="store-checkout-flow")
+     * @Route("/tienda/payment/confirmacion/{id}", name="store-confirmation")
      */
-    public function payFlow(){
-      $APIKEY = "6E8DE1F0-CAAB-43EA-86BA-4799L42C2069"; // Registre aquí su apiKey
-            $SECRETKEY = "20bad08dda5c13b497091fcb0bdc30d936c19c53"; // Registre aquí su secretKey
-            $APIURL = "https://flow.tuxpan.com/api"; // Producción EndPoint o Sandbox EndPoint
-            $BASEURL = "localhost"; //Registre aquí la URL base en su página donde instalará el cliente
+     public function confirmPayment(Request $request, $id,  \Swift_Mailer $mailer){
 
-$total = 200;
-$details = "owo";
-$id = 10;
+       $params = array(
+         "commerceId" => $id,
+       );
+       //Define el metodo a usar
+       $serviceName = "payment/getStatusByCommerceId";
+       try {
+         // Ejecuta el servicio
+         $response = $this->send($serviceName, $params,"GET");
 
-      $totalToPay = $total + ((6/100) * ($total));
+         $sessionCart = $request->getSession();
+         $sessionCart->set('ProductIDs', array());
+         $sessionCart->set('buyid', "");
 
-         //Para datos opcionales campo "optional" prepara un arreglo JSON
-    $optional = array(
-      "Descripción" => $details
-    );
-    $optional = json_encode($optional);
-    //Prepara el arreglo de datos
-    $params = array(
-      "commerceOrder" => $id,
-      "subject" => "Pago ArteImpreso.cl",
-      "currency" => "CLP",
-      "amount" => $totalToPay,
-      "email" => "joscri2698@gmail.com",
-      "paymentMethod" => 9,
-      "urlConfirmation" => $BASEURL,
-      "urlReturn" => $BASEURL,
-      "optional" => $optional
-    );
-    //Define el metodo a usar
-    $serviceName = "payment/create";
-    try {
-      // Ejecuta el servicio
-      $response = $this->send($serviceName, $params,"POST");
-      //Prepara url para redireccionar el browser del pagador
-      $redirect = $response["url"] . "?token=" . $response["token"];
-      //header("location:$redirect");
-      return $this->redirect($redirect);
-    } catch (Exception $e) {
-      echo $e->getCode() . " - " . $e->getMessage();
-      //throw new Exception($e->getMessage());
-      return $this->redirect("https://www.arteimpreso.cl");
+         $order = $this->getDoctrine()
+         ->getRepository(Sale::class)
+         ->findOneBy(['orderid'=> $id]);
+
+         $status = $response['status'];
+
+         if($order){
+           switch($status){
+             case 1:
+                $order->setStatus('Pendiente de Pago');
+             break;
+             case 2:
+                $order->setStatus('Pagado');
+             break;
+             case 3:
+                $order->setStatus('Rechazado');
+             break;
+             case 4:
+                $order->setStatus('Anulado');
+             break;
+             default:
+              $order->setStatus('Orden Generada');
+           }
+           $entityManager = $this->getDoctrine()->getManager();
+           $entityManager->persist($order);
+           $entityManager->flush();
+         }
+
+         $orderresume = json_decode($order->getResume());
+
+         $arrayorder = json_decode($orderresume, true);
+
+         $sendTo = $order->getClientmail();
+
+         if($order == 2){
+
+           $message = (new \Swift_Message('Hello Email'))
+           ->setSubject('Área de Ventas - Arte Impreso')
+           ->setFrom('joscri2698@gmail.com','Arte Impreso')
+           ->setTo($sendTo)
+           ->setBody(
+             $this->renderView(
+               'emails/clientorder.html.twig',
+                array(
+                  'resume' => $arrayorder,
+                  'order' => $order,
+                  'message' => $messageto
+              )
+             ),
+             'text/html'
+           );
+
+           $mailer->send($message);
+
+         }
+
+           return $this->render('frontend/store/result/successful.html.twig', [
+               'status' => $status,
+               'title' => 'Tu Pedido',
+               'resume' => $arrayorder,
+               'order' => $order
+           ]);
+
+         //header("location:$redirect");
+
+       } catch (Exception $e) {
+         echo $e->getCode() . " - " . $e->getMessage();
+         throw new Exception($e->getMessage());
+         //return $this->redirect("https://www.arteimpreso.cl");
+       }
+
+
     }
+
+    /**
+     * @Route("/orden/{id}", name="store-order")
+     */
+     public function obtainOrder($id){
+
+       $order = $this->getDoctrine()
+       ->getRepository(Sale::class)
+       ->findOneBy(['orderid'=> $id]);
+
+       $orderresume = json_decode($order->getResume());
+
+       $arrayorder = json_decode($orderresume, true);
+
+       return $this->render('frontend/store/result/order.html.twig', [
+           'order' =>  $order,
+           'resume' => $arrayorder,
+           'title' => 'Estado de Orden'
+       ]);
+
+     }
+
+
+
+    /**
+     * @Route("/tienda/pagar/flow/{id}", name="store-checkout-flow")
+     */
+    public function payFlow($id){
+
+      $order = $this->getDoctrine()
+      ->getRepository(Sale::class)
+      ->findOneBy(['orderid'=> $id]);
+
+      if($order){
+              $APIKEY = "6E8DE1F0-CAAB-43EA-86BA-4799L42C2069"; // Registre aquí su apiKey
+              $SECRETKEY = "20bad08dda5c13b497091fcb0bdc30d936c19c53"; // Registre aquí su secretKey
+              $APIURL = "https://flow.tuxpan.com/api"; // Producción EndPoint o Sandbox EndPoint
+              $BASEURL = "https://www.arteimpreso.cl/"; //Registre aquí la URL base en su página donde instalará el cliente
+
+              $total = $order->getTotal();
+              $details = "owo";
+              $id = $order->getOrderid();
+
+        //$totalToPay = $total + ((6/100) * ($total));
+
+           //Para datos opcionales campo "optional" prepara un arreglo JSON
+      $optional = $order->getResume();
+      //$optional = json_encode($optional);
+      //Prepara el arreglo de datos
+      $params = array(
+        "commerceOrder" => $id,
+        "subject" => "Pago ArteImpreso.cl",
+        "currency" => "CLP",
+        "amount" => $total,
+        "email" => "joscri2698@gmail.com",
+        "paymentMethod" => 9,
+        "urlConfirmation" => $BASEURL ,
+        "urlReturn" => $BASEURL . 'tienda/payment/confirmacion/' . $id,
+        "optional" => $optional
+      );
+      //Define el metodo a usar
+      $serviceName = "payment/create";
+      try {
+        // Ejecuta el servicio
+        $response = $this->send($serviceName, $params,"POST");
+        //Prepara url para redireccionar el browser del pagador
+        $redirect = $response["url"] . "?token=" . $response["token"];
+        //header("location:$redirect");
+        return $this->redirect($redirect);
+      } catch (Exception $e) {
+        echo $e->getCode() . " - " . $e->getMessage();
+        throw new Exception($e->getMessage());
+        //return $this->redirect("https://www.arteimpreso.cl");
+      }
+      }
+
+
     }
 
     /**
@@ -291,7 +490,10 @@ $id = 10;
 		if(!function_exists("hash_hmac")) {
 			throw new Exception("function hash_hmac not exist", 1);
 		}
+
+    //Development
 		return hash_hmac('sha256', $toSign , "20bad08dda5c13b497091fcb0bdc30d936c19c53");
+    
 	}
 
   /**

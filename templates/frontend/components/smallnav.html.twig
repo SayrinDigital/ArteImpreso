@@ -24,12 +24,16 @@
   color: #333;
 }
 
+.uk-navbar-nav>li>a{
+  text-transform: none;
+}
 
+.uk-navbar-nav>li.uk-active{
+  /*border-top: 4px solid #EA52B6;*/
+  box-shadow: inset 0 -5px 0 #EA52B6;
+}
 
 </style>
-
-{% set currentPath = app.request.get('_route') %}
-
 
 <div class="nav-container" uk-sticky="animation: uk-animation-slide-top; sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky active-nav; cls-inactive: disabled-nav; top: 200">
 
@@ -42,11 +46,33 @@
 
     </div>
 
+    <div class="uk-navbar-right uk-hidden@s">
+      <a class="uk-navbar-toggle" uk-navbar-toggle-icon uk-toggle="target: #offcanvas-nav-primary" href="#"></a>
+    </div>
+
     <div class="uk-navbar-right uk-visible@s">
         <ul class="uk-navbar-nav">
-            <li {% if currentPath=="home" %} class="uk-active" {% endif %} ><a href="{{ path('home') }}">Portada</a></li>
-              <li {% if currentPath=="store" %} class="uk-active" {% endif %} ><a href="{{ path('store') }}">Tienda</a></li>
-              <li {% if currentPath=="contact" %} class="uk-active" {% endif %} ><a href="{{ path('contact') }}">Contacto</a></li>
+            <li {% if currentPath=="home" %} class="uk-active" {% endif %} ><a class="title-anim" data-in-effect="bounceIn" href="{{ path('home') }}">Portada</a></li>
+              <li {% if currentPath starts with "store" %} class="uk-active" {% endif %} ><a class="title-anim" data-in-effect="bounceIn" href="{{ path('store') }}">Tienda</a>
+                <div class="uk-navbar-dropdown" uk-dropdown="animation: uk-animation-slide-top-small; duration: 1000">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                      {% for category in categories %}
+                      <li><a href="{{ path('storebycategory', { 'categoryId' : category.id, 'page' : 1 }) }}">{{ category.name }}</a></li>
+                      {% endfor %}
+                    </ul>
+                </div>
+              </li>
+              <li {% if currentPath starts with "services" %} class="uk-active" {% endif %} >
+                <a class="title-anim" data-in-effect="bounceIn" href="#" >Servicios</a>
+                                <div class="uk-navbar-dropdown" uk-dropdown="animation: uk-animation-slide-top-small; duration: 1000">
+                                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                                      {% for service in services %}
+                                      <li><a href="{{ path('services', { 'serviceId' : service.id }) }}">{{ service.name }}</a></li>
+                                      {% endfor %}
+                                    </ul>
+                                </div>
+               </li>
+              <li {% if currentPath=="contact" %} class="uk-active" {% endif %} ><a class="title-anim" data-in-effect="bounceIn" href="{{ path('contact') }}">Contacto</a></li>
         </ul>
         <div class="uk-navbar-item">
           <div><a class="link-c uk-button uk-button-large" href="{{ path('store-cart') }}"> <span class="uk-margin-small-right uk-icon" uk-icon="icon: cart;">

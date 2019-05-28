@@ -1,0 +1,58 @@
+{% extends 'frontend/base.html.twig' %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+
+<div class="uk-background-cover  uk-position-relative" data-src="{{ asset('components/header-b.svg') }}" uk-img>
+
+<div class="uk-section">
+  <div class="uk-container tm-container-medium">
+
+<div class="uk-flex uk-flex-center uk-flex-middle uk-text-center">
+  <div class="uk-width-xlarge">
+    <div class="service-container">
+      <h1 class="title uk-margin-remove title-anim" data-in-effect="bounceIn">Confirmación de Pago</h1>
+      <p class="content-description">
+        {% if (status == 1) or (status == 3) or (status == 4) %}
+           No se pudo completar tu compra! :(
+        {% elseif status == 2 %}
+           Recibimos tu pago satisfactoriamente. Se enviará una copia con los detalles de tu compra al correo proporcionado.
+        {% endif %}
+      </p>
+      <p>Si tienes alguna duda, contáctanos:</p>
+      <div>
+        <a href="{{ path('home') }}" class="link-d uk-margin-small-right uk-button uk-button-large">Entendido</a>
+           <a href="{{ path('contact') }}" class="link-c uk-margin uk-button uk-button-large">Contáctanos</a>
+      </div>
+   </div>
+ </div>
+</div>
+
+  </div>
+</div>
+
+<div class="uk-section">
+  <div class="uk-container tm-container-medium">
+
+    <div class="uk-card uk-margin-auto uk-border-rounded uk-card-default uk-card-body uk-width-1-2@m">
+        <div class="uk-card-badge uk-label uk-text-capitalize">{{ order.status }}</div>
+        <h3 class="uk-margin-remove">Orden N°{{ order.orderid }}</h3>
+<h3 class="uk-margin-remove pink-accent">Total: ${{ order.total|number_format(0) }} CLP</h3>
+<hr class="uk-hr">
+<div class="uk-list">
+  {% for item in resume %}
+  <li>
+    <div>
+      <h4 class="uk-margin-remove">{{ loop.index }} - {{ item.name }} - <span class="pink-accent">${{ item.price|number_format(0) }} CLP</span></h4>
+      <p class="uk-margin-remove">{{ item.units }} unidad{% if item.units > 1 %}es{% endif %}</p>
+    </div>
+  </li>
+  {% endfor %}
+</div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+{% endblock %}

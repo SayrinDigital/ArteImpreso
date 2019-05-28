@@ -1,22 +1,26 @@
 {% extends 'frontend/base.html.twig' %}
 
+{% block title %}{{ title }}{% endblock %}
+
 {% block body %}
 
-  <div class="uk-background-cover" uk-height-viewport uk-img data-src="{{ asset('components/header.svg') }}">
-    <div class="uk-section">
-			<div class="uk-margin-auto">
-	                <div class="uk-padding-large uk-text-center">
-	                  <div class="">
-	                    <h1 class="title uk-margin-remove">Experimenta el</h1>
-	                    <h1 class="title uk-margin-remove">arte real</h1>
-	                    <p class="uk-width-xlarge uk-margin-auto">
-	                      Somos una empresa líder  en el servicio al cliente, impresión y terminaciones de alta calidad. Enfocados en la mejor calidad y eficiencia en la entrega de productos y servicios.
-	                    </p>
-	                    <a href="{{ path('store') }}" class="link-c uk-button uk-button-large uk-margin-small-right">Visita Nuestra Tienda</a>
-											<a href="{{ path('store') }}" class="link-a uk-button uk-button-large">Contáctanos</a>
-	                  </div>
-	                </div>
-	          </div>
+  <div class="uk-background-cover"  uk-height-viewport uk-img data-src="{{ asset('components/header.svg') }}">
+    <div class="uk-section uk-section-large">
+<div class="uk-container tm-container-medium">
+  <div class="uk-margin-auto">
+              <div class="uk-text-center">
+                <div class="">
+                  <h1 class="title uk-margin-remove title-anim" data-in-effect="bounceIn">Experimenta el</h1>
+                  <h1 class="title uk-margin-remove title-anim" data-in-effect="bounceIn">arte real</h1>
+                  <p class="uk-width-xlarge@s uk-width-1-1 uk-text-center uk-margin-auto">
+                    Somos una empresa líder  en el servicio al cliente, impresión y terminaciones de alta calidad. Enfocados en la mejor calidad y eficiencia en la entrega de productos y servicios.
+                  </p>
+                  <a href="{{ path('store') }}" class="link-c uk-button uk-button-large uk-margin-small-right ">Visita Nuestra Tienda</a>
+                    <a href="{{ path('contact') }}" class="uk-margin link-d uk-button uk-button-large">Contáctanos</a>
+                </div>
+              </div>
+        </div>
+</div>
     </div>
   </div>
 
@@ -43,28 +47,28 @@
 
 <div class="uk-container tm-container-medium uk-text-center uk-container-small">
 
-    <img src="{{ asset('components/icon-a.svg') }}"  alt="" uk-img>
+    {#<img src="{{ asset('components/icon-a.svg') }}"  alt="" uk-img>#}
 
     <div class="uk-child-width-1-3@s uk-grid-match" uk-scrollspy="cls: uk-animation-slide-bottom; target: div; delay: 200;" uk-grid>
       <div>
-        <div class="uk-card uk-card-body uk-border-rounded uk-box-shadow-medium uk-overflow-hidden">
-          <div class="circle-option uk-margin-auto" style="border: 25px solid #1d98d5;"></div>
+        <div class="uk-card uk-card-body uk-background-default uk-border-rounded uk-box-shadow-medium uk-overflow-hidden">
+          <div class="circle-option uk-margin-auto" style="border: 15px solid #1d98d5;"></div>
           <h3>Eficiencia</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium aspernatur, mollitia! Aspernatur.</p>
         </div>
       </div>
 
       <div>
-        <div class="uk-card uk-card-body uk-border-rounded uk-box-shadow-medium uk-overflow-hidden">
-<div class="circle-option uk-margin-auto" style="border: 25px solid #e8c42b;"></div>
+        <div class="uk-card uk-card-body uk-background-default uk-border-rounded uk-box-shadow-medium uk-overflow-hidden">
+<div class="circle-option uk-margin-auto" style="border: 15px solid #e8c42b;"></div>
           <h3>Responsabilidad</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium aspernatur, mollitia! Aspernatur.</p>
         </div>
       </div>
 
       <div>
-        <div class="uk-card uk-card-body uk-border-rounded uk-box-shadow-medium uk-overflow-hidden">
-<div class="circle-option uk-margin-auto" style="border: 25px solid #eb387e;"></div>
+        <div class="uk-card uk-card-body uk-background-default uk-border-rounded uk-box-shadow-medium uk-overflow-hidden">
+<div class="circle-option uk-margin-auto" style="border: 15px solid #eb387e;"></div>
           <h3>Rápidez</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium aspernatur, mollitia! Aspernatur.</p>
         </div>
@@ -92,12 +96,12 @@
 
           <div>
      <div>
-       <div class="uk-child-width-1-2" uk-grid="parallax: 200">
+       <div class="uk-child-width-1-2" uk-grid="parallax: 200" uk-scrollspy="cls:uk-animation-scale-up; target: .anim; delay: 500;">
          <div>
-           <div><img uk-img src="https://sayrin.cl/images/product-a.png" alt=""></div>
+           <div class="anim"><img uk-img src="https://sayrin.cl/images/product-a.png" alt=""></div>
          </div>
          <div>
-           <div><img uk-img src="https://sayrin.cl/images/product-b.png" alt=""></div>
+           <div class="anim"><img uk-img src="https://sayrin.cl/images/product-b.png" alt=""></div>
          </div>
        </div>
      </div>

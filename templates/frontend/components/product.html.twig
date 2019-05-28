@@ -38,7 +38,7 @@
 
 {% set currentPath = app.request.attributes.get('_route') %}
 
-<div class="reveal-animation-b">
+<div {% if currentPath != "store-cart" %} class="reveal-animation-b" {% endif %}>
   <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
       <div class="uk-card-media-left uk-cover-container">
           <img src="{{ asset('uploads/productcovers/' ~ product.cover) }}" alt="" uk-cover>
@@ -47,17 +47,18 @@
       <div>
 
           <div class="uk-card-body">
-            <h3 class="product-title uk-card-title uk-margin-remove">{{ product.name|capitalize }}</h3>
+            <h3 class="product-title uk-card-title uk-margin-remove"><span class="pink-accent">- </span>{{ product.name|capitalize }}</h3>
               <p class="category  uk-margin-remove-top uk-margin-medium-top">{{ product.category.name }}</p>
              <p>{{ product.description }}</p>
-              <h2 >$ <span id="price_value-{{ product.id }}"> {{ product.price|number_format(0) }}</span> CLP</h2>  
+              <h2 >$ <span id="price_value-{{ product.id }}"> {{ product.price|number_format(0) }}</span> CLP</h2>
 
              <div class="uk-margin-top">
              {% if currentPath == "store-cart" %}
              <div class="uk-margin">
                <label class="uk-form-label" for="form-stacked-text">Unidades</label>
-               <input data-initialprice="{{ product.price }}" data-productid="{{ product.id }}" class=" units-input uk-input number-form" type="number" min="1" value="1" name="points" step="1">
+               <input data-initialprice="{{ product.price }}" name="input-{{ product.id }}" data-productid="{{ product.id }}" class="units-input uk-input number-form" type="number" min="1" value="1" name="points" step="1">
              </div>
+             <a href="{{ path('store-cart-remove-product', { "productid" : product.id }) }}" class="link-c uk-button">Quitar</a>
              {% else %}
              <a href="{{ path('store-product', { "productId" : product.id }) }}" class="link-c uk-button">Comprar</a>
              {% endif %}
