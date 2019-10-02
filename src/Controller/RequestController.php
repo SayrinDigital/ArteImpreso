@@ -205,7 +205,7 @@ class RequestController extends AbstractController
                      $message = (new \Swift_Message('Hello Email'))
                      ->setSubject('Contacto - Arte Impreso')
                      ->setFrom('joscri2698@gmail.com','Arte Impreso')
-                     ->setTo('josepuma@sayrin.cl')
+                     ->setTo(['patricio@arteimpreso.cl','josepuma@sayrin.cl','claudio@arteimpreso.cl'])
                      ->setBody(
                        $this->renderView(
                          'emails/contact.html.twig',
